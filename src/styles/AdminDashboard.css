@@ -1,0 +1,411 @@
+.admin-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Slideshow background */
+.admin-bg-slides {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.admin-bg-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+}
+
+.admin-bg-slide.active { opacity: 1; }
+
+.admin-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(240, 240, 245, 0.88);
+}
+
+.admin-sidebar {
+  width: 280px;
+  background: rgba(20, 20, 40, 0.92);
+  backdrop-filter: blur(8px);
+  color: white;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.admin-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  padding: 8px;
+}
+
+.admin-brand-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(232, 201, 176, 0.9);
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+.admin-kpis {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.admin-kpi {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 10px 8px;
+  text-align: center;
+}
+
+.admin-kpi span {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.admin-kpi label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 2px;
+}
+
+.admin-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.admin-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.6);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  text-align: right;
+}
+
+.admin-tab:hover {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.admin-tab.active {
+  background: rgba(255,255,255,0.1);
+}
+
+.tab-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tab-count {
+  margin-right: auto;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-size: 12px;
+}
+
+.admin-couples-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-search {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.07);
+  color: white;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  margin-bottom: 10px;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+.admin-search::placeholder { color: rgba(255,255,255,0.35); }
+.admin-search:focus { border-color: rgba(201,160,122,0.6); }
+
+.admin-couple-item {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-couple-item:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.admin-couple-item.active {
+  background: rgba(108,99,255,0.3);
+  border: 1px solid rgba(108,99,255,0.5);
+}
+
+.admin-couple-item strong {
+  font-size: 14px;
+  color: white;
+}
+
+.admin-couple-item span {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+}
+
+.admin-empty {
+  text-align: center;
+  color: rgba(255,255,255,0.3);
+  font-size: 13px;
+  padding: 24px;
+}
+
+.admin-loading {
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  padding: 16px;
+}
+
+.admin-logout {
+  margin-top: 16px;
+  padding: 10px;
+  background: rgba(255,255,255,0.07);
+  border: none;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.admin-logout:hover {
+  background: rgba(255,255,255,0.12);
+  color: white;
+}
+
+.admin-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.admin-placeholder {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  font-size: 16px;
+}
+
+/* ---- Main section toggle (couples / management) ---- */
+.admin-section-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.admin-section-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 11px;
+  border: 2px solid transparent;
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.6);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  text-align: right;
+}
+
+.admin-section-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.admin-section-btn.active {
+  background: rgba(255,255,255,0.12);
+  color: white;
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* Management section button gets champagne accent when active */
+.admin-section-btn-management.active {
+  border-color: rgba(201,160,122,0.6);
+  color: #e8c9a0;
+  background: rgba(201,160,122,0.12);
+}
+
+/* ---- Management sub-tabs in sidebar ---- */
+.admin-management-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.admin-mgmt-tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 11px;
+  border: 2px solid transparent;
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.55);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  text-align: right;
+}
+
+.admin-mgmt-tab:hover {
+  background: rgba(255,255,255,0.1);
+  color: white;
+}
+
+.admin-mgmt-tab.active {
+  background: rgba(201,160,122,0.18);
+  border-color: rgba(201,160,122,0.55);
+  color: #e8c9a0;
+}
+
+/* ---- Management view wrapper ---- */
+.admin-management-view {
+  width: 100%;
+  min-height: 100%;
+}
+
+/* ---- Mobile responsive ---- */
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    max-height: none;
+    padding: 16px;
+    overflow-y: visible;
+  }
+
+  .admin-brand {
+    margin-bottom: 12px;
+  }
+
+  .admin-kpis {
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .admin-kpi {
+    padding: 8px 6px;
+  }
+
+  .admin-kpi span {
+    font-size: 16px;
+  }
+
+  .admin-section-toggle {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .admin-section-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 9px 10px;
+    font-size: 13px;
+    justify-content: center;
+  }
+
+  .admin-management-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .admin-mgmt-tab {
+    flex: 1;
+    min-width: 100px;
+    padding: 9px 10px;
+    font-size: 13px;
+    justify-content: center;
+  }
+
+  .admin-couples-list {
+    max-height: 220px;
+  }
+
+  .admin-main {
+    padding: 16px;
+    overflow-y: visible;
+  }
+
+  .admin-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .admin-tab {
+    flex: 1;
+    min-width: 100px;
+    padding: 8px 10px;
+    font-size: 13px;
+    justify-content: center;
+  }
+}

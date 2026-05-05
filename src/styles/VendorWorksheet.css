@@ -1,0 +1,545 @@
+.vw-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vw-guests-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f0f0ff;
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.vw-guests-row label {
+  font-weight: 700;
+  font-size: 14px;
+  color: #1a1a2e;
+}
+
+.vw-guests-input {
+  width: 90px;
+  padding: 6px 10px;
+  border: 2px solid #6c63ff;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  font-family: inherit;
+  color: #1a1a2e;
+}
+
+.vw-guests-input:focus { outline: none; }
+
+.vw-guests-note {
+  font-size: 12px;
+  color: #888;
+}
+
+.vw-actions-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.vw-defaults {
+  flex: 1;
+}
+
+.vw-defaults-label {
+  font-size: 12px;
+  color: #888;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.vw-defaults-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vw-default-btn {
+  padding: 6px 12px;
+  border: 1.5px solid #6c63ff;
+  border-radius: 20px;
+  background: transparent;
+  color: #6c63ff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.vw-default-btn:hover {
+  background: #6c63ff;
+  color: white;
+}
+
+.vw-form {
+  background: #f8f8ff;
+  border: 1.5px solid #e0e0ff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vw-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.vw-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vw-form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.vw-input {
+  padding: 9px 12px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: white;
+  color: #1a1a2e;
+}
+
+.vw-input:focus { outline: none; border-color: #6c63ff; }
+
+.vw-type-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.vw-type-btn {
+  flex: 1;
+  padding: 8px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  color: #555;
+}
+
+.vw-type-btn.active {
+  border-color: #6c63ff;
+  background: #6c63ff;
+  color: white;
+}
+
+.vw-confirm-group {
+  justify-content: flex-start;
+}
+
+.vw-confirm-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #e0e0e0;
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  color: #888;
+  transition: all 0.15s;
+}
+
+.vw-confirm-btn.confirmed {
+  border-color: #90be6d;
+  background: #90be6d;
+  color: white;
+}
+
+.vw-form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.vw-table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.vw-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.vw-table th {
+  background: #f5f6fa;
+  padding: 10px 14px;
+  text-align: right;
+  font-weight: 600;
+  color: #888;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.vw-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: #1a1a2e;
+}
+
+.vw-table tr:last-child td { border-bottom: none; }
+
+.vw-table .confirmed-row td {
+  background: #f6fff6;
+}
+
+.vw-total { font-weight: 700; color: #1a1a2e; }
+
+.vw-status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  font-family: inherit;
+}
+
+.vw-status-badge.confirmed { background: #d4edda; color: #155724; }
+.vw-status-badge.pending { background: #fff3cd; color: #856404; }
+
+.vw-actions { display: flex; gap: 6px; }
+
+.vw-edit-btn {
+  padding: 4px 10px;
+  border: 1px solid #6c63ff;
+  border-radius: 6px;
+  background: transparent;
+  color: #6c63ff;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.vw-delete-btn {
+  padding: 4px 10px;
+  border: 1px solid #e63946;
+  border-radius: 6px;
+  background: transparent;
+  color: #e63946;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.vw-total-row td {
+  background: #f5f6fa;
+  border-top: 2px solid var(--border);
+  font-size: 15px;
+}
+
+.vw-empty {
+  text-align: center;
+  color: #aaa;
+  font-size: 14px;
+  padding: 24px;
+}
+
+/* Drag handle */
+.vw-drag-col { width: 24px; }
+.vw-drag-handle {
+  color: #ccc;
+  font-size: 16px;
+  cursor: grab;
+  user-select: none;
+  padding: 12px 6px !important;
+}
+.vw-drag-hint {
+  font-size: 11px;
+  color: #bbb;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+/* Balance bar */
+.vw-balance-bar {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  background: #f0f0ff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #555;
+  flex-wrap: wrap;
+}
+.vw-balance-remaining { color: #6c63ff; margin-right: auto; }
+
+/* Auto-fill label */
+.vw-auto-label { font-size: 11px; color: #9090cc; font-weight: 400; }
+
+/* VAT hints */
+.vw-vat-hint {
+  font-size: 11px;
+  color: #e08030;
+  background: #fff8f0;
+  border-radius: 6px;
+  padding: 3px 8px;
+  margin-top: 4px;
+  display: block;
+}
+.vw-vat-breakdown {
+  font-size: 11px;
+  color: #b040a0;
+  background: #fff0fc;
+  border-radius: 6px;
+  padding: 3px 8px;
+  margin-top: 4px;
+  display: block;
+}
+.vw-pd-no-vat {
+  font-size: 11px;
+  color: #e08030;
+  background: #fff8f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.vw-payment-row-last {
+  border: 1.5px dashed #a0a0ff;
+  border-radius: 10px;
+}
+
+/* Payment splits */
+.vw-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #555;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vw-add-payment-btn {
+  padding: 4px 12px;
+  background: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.vw-payment-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  background: #f0f0ff;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.vw-payment-amount { min-width: 110px; }
+
+.vw-vat-group { min-width: 130px; }
+
+.vw-vat-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #e0e0e0;
+  background: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  color: #888;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.vw-vat-btn.active { border-color: #f72585; background: #fff0f8; color: #f72585; }
+
+.vw-remove-payment {
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 12px;
+  align-self: flex-end;
+  margin-bottom: 0;
+}
+.vw-remove-payment:hover { border-color: #e63946; color: #e63946; }
+
+.vw-payments-total {
+  font-size: 13px;
+  color: #555;
+  text-align: left;
+}
+
+/* Expanded payments in table */
+.vw-paid-expand {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  color: #6c63ff;
+  font-weight: 600;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.vw-payments-expanded td {
+  background: #f8f8ff;
+  padding: 0 14px 12px;
+}
+
+.vw-payments-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.vw-payment-detail-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  font-size: 13px;
+  color: #555;
+}
+
+.vw-advance-row { color: #6c63ff; font-weight: 600; }
+
+.vw-pd-label { font-weight: 700; min-width: 70px; }
+.vw-pd-vat { font-size: 11px; color: #f72585; background: #fff0f8; padding: 2px 6px; border-radius: 4px; }
+.vw-pd-method { background: #e8e8ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+.vw-pd-date { color: #888; font-size: 12px; }
+
+.vw-vendor-wa {
+  margin-right: 6px;
+  font-size: 16px;
+  text-decoration: none;
+  vertical-align: middle;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+.vw-vendor-wa:hover { opacity: 1; }
+
+@media (max-width: 640px) {
+  .vw-table-wrap {
+    font-size: 13px;
+  }
+
+  .vw-table th,
+  .vw-table td {
+    padding: 9px 8px;
+  }
+
+  .vw-guests-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .vw-actions-row {
+    flex-direction: column;
+  }
+
+  .vw-defaults-btns {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .vw-payment-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .vw-payment-amount,
+  .vw-vat-group {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .vw-form-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .vw-balance-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+/* Cash VAT badge */
+.vw-vat-cash-badge {
+  display: inline-block;
+  padding: 6px 10px;
+  background: #fff8e8;
+  border: 1.5px solid #f0c040;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #a07010;
+  white-space: nowrap;
+}
+
+/* VAT summary box */
+.vw-vat-summary {
+  background: #f5f5ff;
+  border: 1.5px solid #d0d0f0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vw-vat-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #555;
+}
+
+.vw-vat-cash {
+  color: #a07010;
+  font-size: 12px;
+}
+
+.vw-vat-detail {
+  color: #8040a0;
+  font-size: 12px;
+}
+
+.vw-vat-total {
+  border-top: 1px solid #c0c0e0;
+  padding-top: 6px;
+  margin-top: 2px;
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 14px;
+}

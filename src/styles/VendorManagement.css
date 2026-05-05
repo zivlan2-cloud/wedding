@@ -1,0 +1,88 @@
+.vendor-management {
+  padding: 0;
+}
+
+.vendor-management h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.vendor-form {
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 16px 0;
+  border: 1.5px solid var(--border);
+}
+
+.vendors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.vendor-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  border-right: 4px solid var(--secondary);
+}
+
+.vendor-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.vendor-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.vendor-type {
+  background: var(--bg);
+  color: var(--text-light);
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.vendor-details {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detail .label {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.detail .value {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.notes {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-bottom: 10px;
+}
+
+.vendor-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

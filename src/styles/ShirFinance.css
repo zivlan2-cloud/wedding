@@ -1,0 +1,302 @@
+/* ShirFinance.css — Shir's financial overview */
+
+.sf-loading {
+  padding: 48px;
+  text-align: center;
+  color: #aaa;
+  font-size: 15px;
+}
+
+.sf-page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-bottom: 32px;
+}
+
+.sf-title-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sf-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.sf-subtitle {
+  font-size: 13px;
+  color: #aaa;
+}
+
+/* KPI Row */
+.sf-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 800px) {
+  .sf-kpi-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.sf-kpi-card {
+  background: white;
+  border-radius: 14px;
+  padding: 20px 20px 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  border-top: 4px solid #c9a07a;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sf-kpi-card.sf-kpi-green {
+  border-top-color: #90be6d;
+}
+
+.sf-kpi-card.sf-kpi-amber {
+  border-top-color: #f8961e;
+}
+
+.sf-kpi-card.sf-kpi-purple {
+  border-top-color: #6c63ff;
+}
+
+.sf-kpi-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a2e;
+  line-height: 1;
+}
+
+.sf-kpi-label {
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* Section */
+.sf-section {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 24px;
+}
+
+.sf-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 18px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0ede8;
+}
+
+.sf-empty {
+  font-size: 13px;
+  color: #bbb;
+  text-align: center;
+  padding: 24px 0;
+}
+
+/* Table */
+.sf-table-wrap {
+  overflow-x: auto;
+}
+
+.sf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  direction: rtl;
+}
+
+.sf-table thead th {
+  text-align: right;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #f0ede8;
+  white-space: nowrap;
+}
+
+.sf-table tbody tr {
+  transition: background 0.12s;
+}
+
+.sf-table tbody tr:hover {
+  background: #fdf8f3;
+}
+
+.sf-table tbody td {
+  padding: 12px 12px;
+  border-bottom: 1px solid #f5f3ef;
+  vertical-align: middle;
+}
+
+.sf-row-dim {
+  opacity: 0.55;
+}
+
+.sf-td-name {
+  font-weight: 600;
+  color: #1a1a2e;
+  white-space: nowrap;
+}
+
+.sf-td-num {
+  font-weight: 600;
+  color: #1a1a2e;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.sf-paid {
+  color: #52a869;
+}
+
+.sf-balance {
+  color: #d4550a;
+}
+
+.sf-balanced {
+  color: #90be6d;
+}
+
+.sf-dim {
+  color: #ccc;
+}
+
+/* Progress bar */
+.sf-td-bar {
+  min-width: 120px;
+}
+
+.sf-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sf-bar {
+  flex: 1;
+  height: 8px;
+  background: #f0ede8;
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 60px;
+}
+
+.sf-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c9a07a, #d4a0a0);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.sf-bar-pct {
+  font-size: 12px;
+  color: #aaa;
+  white-space: nowrap;
+  min-width: 32px;
+}
+
+/* Date column */
+.sf-td-date {
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.sf-next-date {
+  color: #6c63ff;
+  font-weight: 600;
+}
+
+/* Chart */
+.sf-chart-wrap {
+  padding: 8px 0;
+}
+
+/* Manual weddings */
+.sf-add-manual-btn {
+  padding: 7px 16px;
+  background: transparent;
+  border: 1.5px solid #c9a07a;
+  color: #c9a07a;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  margin-bottom: 14px;
+  transition: all 0.15s;
+}
+.sf-add-manual-btn:hover { background: #c9a07a; color: white; }
+
+.sf-manual-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  align-items: flex-end;
+}
+.sf-manual-input {
+  padding: 8px 12px;
+  border: 1.5px solid #e8e4de;
+  border-radius: 9px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #1a1a2e;
+  background: #fafafa;
+  outline: none;
+  flex: 1;
+  min-width: 110px;
+}
+.sf-manual-input:focus { border-color: #c9a07a; }
+.sf-manual-add-btn {
+  padding: 8px 18px;
+  background: #c9a07a;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.sf-manual-add-btn:hover { background: #b8906a; }
+.sf-manual-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #fdf8f3;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  gap: 12px;
+}
+.sf-manual-row-name { font-weight: 600; color: #1a1a2e; flex-shrink: 0; }
+.sf-manual-row-nums { color: #888; flex: 1; }
+.sf-manual-remove {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+.sf-manual-remove:hover { color: #e63946; background: #fde8ea; }
