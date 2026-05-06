@@ -8,6 +8,59 @@ import { ShirMeetings } from './ShirMeetings'
 import { WeddingTimeline } from './WeddingTimeline'
 import '../styles/AdminDashboard.css'
 
+// Returns upcoming anniversary milestones for a couple given their wedding date
+function getAnniversaryInfo(eventDate: string): {
+  weddingDateStr: string
+  nextAnniversaryLabel: string
+  daysUntilNext: number
+  yearsCompleted: number
+} | null {
+  if (!eventDate || eventDate === '2099-01-01') return null
+  const wedding = new Date(eventDate)
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  if (wedding > today) return null // hasn't happened yet
+
+  const weddingDateStr = wedding.toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' })
+  const yearsCompleted = today.getFullYear() - wedding.getFullYear()
+
+  // Next anniversary date (this year or next)
+  let next = new Date(today.getFullYear(), wedding.getMonth(), wedding.getDate())
+  if (next < today) next = new Date(today.getFullYear() + 1, wedding.getMonth(), wedding.getDate())
+  const daysUntilNext = Math.ceil((next.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+  const nextYears = next.getFullYear() - wedding.getFullYear()
+  const nextAnniversaryLabel = nextYears === 1 ? 'שנה ראשונה' : `שנה ${nextYears}`
+
+  return { weddingDateStr, nextAnniversaryLabel, daysUntilNext, yearsCompleted }
+}
+
+// Build notification list for the banner
+function buildNotifications(couples: Couple[]): string[] {
+  const notes: string[] = []
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+
+  for (const c of couples) {
+    if (!c.event_date || c.event_date === '2099-01-01') continue
+    const wedding = new Date(c.event_date)
+    const name = c.couple_name || `${c.partner1_name} ו${c.partner2_name}`
+
+    // Day before wedding
+    const daysToWedding = Math.ceil((wedding.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+    if (daysToWedding === 1) notes.push(`🎊 מחר החתונה של ${name}! בהצלחה!`)
+    if (daysToWedding === 0) notes.push(`💍 היום החתונה של ${name}! מזל טוב!`)
+
+    // Anniversary milestones (for past weddings)
+    if (wedding < today) {
+      const thisYearAnniv = new Date(today.getFullYear(), wedding.getMonth(), wedding.getDate())
+      const daysToAnniv = Math.ceil((thisYearAnniv.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
+      const years = today.getFullYear() - wedding.getFullYear() + (daysToAnniv >= 0 ? 0 : -1) + 1
+      if (daysToAnniv === 7) notes.push(`📸 עוד שבוע שנה ${years} לחתונת ${name} — זמן לפוסט אינסטגרם! ✨`)
+      if (daysToAnniv === 1) notes.push(`📸 מחר שנה ${years} לחתונת ${name} — זמן לפוסט אינסטגרם! 🎉`)
+      if (daysToAnniv === 0) notes.push(`🎂 היום שנה ${years} לחתונת ${name}! מזל טוב! 💜`)
+    }
+  }
+  return notes
+}
+
 type Status = 'מתלבטים' | 'פעילים' | 'עבר'
 type MainSection = 'couples' | 'management'
 type ManagementTab = 'finance' | 'tasks' | 'meetings'
@@ -42,6 +95,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [mainSection, setMainSection] = useState<MainSection>('couples')
   const [managementTab, setManagementTab] = useState<ManagementTab>('finance')
   const [search, setSearch] = useState('')
+  const [bannerIndex, setBannerIndex] = useState(0)
+  const [bannerDismissed, setBannerDismissed] = useState(false)
 
   useEffect(() => { fetchCouples() }, [])
 
@@ -81,8 +136,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     }
   }
 
+  const notifications = buildNotifications(couples)
+
   return (
     <div className="admin-layout">
+      {/* ── Slide-down notification banner ── */}
+      {notifications.length > 0 && !bannerDismissed && (
+        <div className="admin-banner">
+          <div className="admin-banner-content">
+            <span className="admin-banner-text">{notifications[bannerIndex]}</span>
+            {notifications.length > 1 && (
+              <div className="admin-banner-nav">
+                <button onClick={() => setBannerIndex(i => (i - 1 + notifications.length) % notifications.length)}>‹</button>
+                <span>{bannerIndex + 1}/{notifications.length}</span>
+                <button onClick={() => setBannerIndex(i => (i + 1) % notifications.length)}>›</button>
+              </div>
+            )}
+          </div>
+          <button className="admin-banner-close" onClick={() => setBannerDismissed(true)}>✕</button>
+        </div>
+      )}
+
       {/* Background slideshow */}
       <div className="admin-bg-slides">
         {SLIDES.map((src, i) => (
@@ -246,40 +320,52 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               <div className="admin-couples-grid">
                 {grouped[activeTab].filter(c =>
                   (c.couple_name || `${c.partner1_name} ו${c.partner2_name}`).toLowerCase().includes(search.toLowerCase())
-                ).map(couple => (
-                  <div
-                    key={couple.id}
-                    className="admin-couple-card"
-                    onClick={() => setSelected(couple)}
-                    style={{ borderTopColor: STATUS_COLORS[activeTab] }}
-                  >
-                    <div className="admin-couple-card-name">
-                      {couple.couple_name || `${couple.partner1_name} ו${couple.partner2_name}`}
-                    </div>
-                    {couple.event_date && couple.event_date !== '2099-01-01' ? (() => {
-                      const d = new Date(couple.event_date)
-                      const today = new Date(); today.setHours(0,0,0,0)
-                      const days = Math.ceil((d.getTime() - today.getTime()) / (1000*60*60*24))
-                      return (
+                ).map(couple => {
+                  const anniv = activeTab === 'עבר' ? getAnniversaryInfo(couple.event_date) : null
+                  const d = couple.event_date && couple.event_date !== '2099-01-01' ? new Date(couple.event_date) : null
+                  const today = new Date(); today.setHours(0,0,0,0)
+                  const daysToWedding = d ? Math.ceil((d.getTime() - today.getTime()) / (1000*60*60*24)) : null
+                  return (
+                    <div
+                      key={couple.id}
+                      className="admin-couple-card"
+                      onClick={() => setSelected(couple)}
+                      style={{ borderTopColor: STATUS_COLORS[activeTab] }}
+                    >
+                      <div className="admin-couple-card-name">
+                        {couple.couple_name || `${couple.partner1_name} ו${couple.partner2_name}`}
+                      </div>
+
+                      {/* Future wedding date */}
+                      {d && daysToWedding !== null && daysToWedding > 0 && (
                         <div className="admin-couple-card-date-wrap">
                           <span className="admin-couple-card-date">📅 {d.toLocaleDateString('he-IL')}</span>
-                          <span className="admin-couple-card-days" style={{ background: days <= 30 ? '#e63946' : days <= 90 ? '#f8961e' : '#6c63ff' }}>
-                            {days <= 0 ? 'היום!' : `${days}י׳`}
+                          <span className="admin-couple-card-days" style={{ background: daysToWedding <= 30 ? '#e63946' : daysToWedding <= 90 ? '#f8961e' : '#6c63ff' }}>
+                            {`${daysToWedding}י׳`}
                           </span>
                         </div>
-                      )
-                    })() : (
-                      <div className="admin-couple-card-no-date">📅 תאריך לא נקבע</div>
-                    )}
-                    {couple.phone && (
-                      <div className="admin-couple-card-phone">📞 {couple.phone}</div>
-                    )}
-                    {couple.budget > 0 && (
-                      <div className="admin-couple-card-budget">₪{couple.budget.toLocaleString()}</div>
-                    )}
-                    <div className="admin-couple-card-arrow">פתח פרופיל ›</div>
-                  </div>
-                ))}
+                      )}
+
+                      {/* Past wedding — anniversary info */}
+                      {anniv && (
+                        <div className="admin-couple-card-anniv">
+                          <div className="admin-couple-card-anniv-date">
+                            💒 {anniv.weddingDateStr}
+                            <span className="admin-couple-card-anniv-years">({anniv.yearsCompleted} שנים)</span>
+                          </div>
+                          <div className={`admin-couple-card-anniv-next ${anniv.daysUntilNext <= 7 ? 'soon' : ''}`}>
+                            📸 {anniv.nextAnniversaryLabel} — עוד {anniv.daysUntilNext} ימים
+                          </div>
+                        </div>
+                      )}
+
+                      {!d && <div className="admin-couple-card-no-date">📅 תאריך לא נקבע</div>}
+                      {couple.phone && <div className="admin-couple-card-phone">📞 {couple.phone}</div>}
+                      {couple.budget > 0 && <div className="admin-couple-card-budget">₪{couple.budget.toLocaleString()}</div>}
+                      <div className="admin-couple-card-arrow">פתח פרופיל ›</div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )

@@ -5,6 +5,127 @@
   position: relative;
 }
 
+/* ── Slide-down notification banner ── */
+.admin-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: linear-gradient(135deg, #3a1f6e, #6c3fa0);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  box-shadow: 0 4px 24px rgba(60,20,100,0.35);
+  animation: bannerSlideDown 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  direction: rtl;
+}
+
+@keyframes bannerSlideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+.admin-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-banner-text {
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Georgia', serif;
+  line-height: 1.4;
+}
+
+.admin-banner-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.admin-banner-nav button {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: background 0.15s;
+}
+.admin-banner-nav button:hover { background: rgba(255,255,255,0.3); }
+
+.admin-banner-nav span {
+  font-size: 12px;
+  opacity: 0.75;
+  min-width: 28px;
+  text-align: center;
+}
+
+.admin-banner-close {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 13px;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.admin-banner-close:hover { background: rgba(255,255,255,0.3); }
+
+/* ── Anniversary info on past-couple cards ── */
+.admin-couple-card-anniv {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.admin-couple-card-anniv-date {
+  font-size: 12px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.admin-couple-card-anniv-years {
+  font-size: 11px;
+  background: #f0f0ff;
+  color: #6c63ff;
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-weight: 700;
+}
+
+.admin-couple-card-anniv-next {
+  font-size: 12px;
+  color: #888;
+  font-weight: 500;
+}
+
+.admin-couple-card-anniv-next.soon {
+  color: #c0392b;
+  font-weight: 700;
+  background: #fff0ee;
+  border-radius: 8px;
+  padding: 3px 8px;
+}
+
 /* Slideshow background */
 .admin-bg-slides {
   position: fixed;
