@@ -19,26 +19,33 @@
   overflow: hidden;
 }
 
+@media (max-width: 640px) {
+  .cf-page {
+    overflow: visible;
+    width: 100%;
+  }
+}
+
 /* ── Mobile: landing page ── */
 @media (max-width: 640px) {
-  /* Welcome screen: full-page scroll, image fixed at top */
+  /* Welcome screen: vertical stack, full width */
   .cf-welcome {
     flex-direction: column;
+    width: 100%;
     min-height: 100vh;
     overflow-y: auto;
-    position: relative;
   }
 
-  /* ── Hero image: top ~50% of screen, fixed height ── */
+  /* ── Hero image: full width, top of screen ── */
   .cf-welcome-left {
-    width: 100%;
+    width: 100% !important;
     height: 52vh;
     min-height: 220px;
     max-height: 340px;
     position: relative;
     flex-shrink: 0;
     overflow: hidden;
-    order: -1;   /* force image above text panel */
+    order: -1;
   }
 
   /* slides fill the image panel */
@@ -66,10 +73,11 @@
 
   /* ── Content panel: white card that lifts over image bottom ── */
   .cf-welcome-right {
-    width: 100%;
+    width: 100% !important;
+    box-sizing: border-box;
     background: var(--cream);
     border-radius: 28px 28px 0 0;
-    margin-top: -28px;          /* overlap image bottom */
+    margin-top: -28px;
     position: relative;
     z-index: 1;
     padding: 32px 24px 48px;
@@ -77,6 +85,7 @@
     text-align: center;
     box-shadow: 0 -4px 24px rgba(44,26,14,0.08);
     flex: 1;
+    justify-content: flex-start;
   }
 
   /* hide the thin desktop accent bar */
