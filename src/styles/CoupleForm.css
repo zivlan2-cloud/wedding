@@ -523,6 +523,13 @@
 
 .cf-heart { font-size: 56px; margin-bottom: 20px; }
 
+.cf-floral-top {
+  display: block;
+  margin: -20px auto 8px;
+  width: 260px;
+  max-width: 100%;
+}
+
 .cf-thank-card h2 {
   font-size: 26px;
   font-weight: 700;

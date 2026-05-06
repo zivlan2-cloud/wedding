@@ -150,13 +150,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               ))}
             </div>
 
+            <input
+              className="admin-search"
+              placeholder="חיפוש זוג..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+
             <div className="admin-couples-list">
-              <input
-                className="admin-search"
-                placeholder="חיפוש זוג..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              />
               {loading ? <p className="admin-loading">טוען...</p> : null}
               {grouped[activeTab].filter(c =>
                 (c.couple_name || `${c.partner1_name} ו${c.partner2_name}`).toLowerCase().includes(search.toLowerCase())
@@ -172,8 +173,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                   onClick={() => setSelected(couple)}
                 >
                   <strong>{couple.couple_name || `${couple.partner1_name} ו${couple.partner2_name}`}</strong>
+                  {couple.event_date && couple.event_date !== '2099-01-01' && (
+                    <span>📅 {new Date(couple.event_date).toLocaleDateString('he-IL')}</span>
+                  )}
                   <span>{couple.phone || ''}</span>
-                  {couple.estimated_guests && <span>{couple.estimated_guests} אורחים</span>}
                 </div>
               ))}
             </div>

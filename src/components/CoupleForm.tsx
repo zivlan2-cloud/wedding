@@ -124,14 +124,59 @@ export const CoupleForm: React.FC = () => {
           <div className="cf-form-overlay" />
         </div>
         <div className="cf-thank-card">
-          <div className="cf-heart">✿</div>
+          {/* Floral decoration top */}
+          <svg className="cf-floral-top" width="260" height="130" viewBox="0 0 260 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Main stems */}
+            <path d="M130 125 C120 90, 100 60, 70 35" stroke="#C4A882" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
+            <path d="M130 125 C140 88, 162 58, 192 32" stroke="#C4A882" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
+            <path d="M130 125 C128 80, 125 45, 128 8" stroke="#C4A882" strokeWidth="1" fill="none" strokeLinecap="round"/>
+            {/* Left branch leaves */}
+            <ellipse cx="88" cy="52" rx="18" ry="8" fill="#C8D5B9" opacity="0.7" transform="rotate(-40 88 52)"/>
+            <ellipse cx="68" cy="38" rx="15" ry="7" fill="#B5C9A0" opacity="0.6" transform="rotate(-50 68 38)"/>
+            <ellipse cx="55" cy="60" rx="14" ry="6" fill="#C8D5B9" opacity="0.55" transform="rotate(-20 55 60)"/>
+            {/* Right branch leaves */}
+            <ellipse cx="175" cy="48" rx="18" ry="8" fill="#C8D5B9" opacity="0.7" transform="rotate(40 175 48)"/>
+            <ellipse cx="195" cy="35" rx="15" ry="7" fill="#B5C9A0" opacity="0.6" transform="rotate(50 195 35)"/>
+            <ellipse cx="208" cy="58" rx="14" ry="6" fill="#C8D5B9" opacity="0.55" transform="rotate(20 208 58)"/>
+            {/* Center top leaves */}
+            <ellipse cx="118" cy="25" rx="12" ry="5" fill="#C8D5B9" opacity="0.6" transform="rotate(-15 118 25)"/>
+            <ellipse cx="142" cy="22" rx="12" ry="5" fill="#B5C9A0" opacity="0.6" transform="rotate(15 142 22)"/>
+            {/* Large flower left */}
+            <circle cx="65" cy="28" r="12" fill="#F2C4CE" opacity="0.85"/>
+            <circle cx="65" cy="28" r="7" fill="#F9D9DF" opacity="0.9"/>
+            <circle cx="65" cy="28" r="4" fill="#E8A0B0" opacity="0.8"/>
+            <ellipse cx="55" cy="20" rx="6" ry="4" fill="#F2C4CE" opacity="0.7" transform="rotate(-30 55 20)"/>
+            <ellipse cx="75" cy="20" rx="6" ry="4" fill="#F2C4CE" opacity="0.7" transform="rotate(30 75 20)"/>
+            <ellipse cx="57" cy="36" rx="6" ry="4" fill="#F2C4CE" opacity="0.65" transform="rotate(20 57 36)"/>
+            <ellipse cx="73" cy="36" rx="6" ry="4" fill="#F2C4CE" opacity="0.65" transform="rotate(-20 73 36)"/>
+            {/* Large flower right */}
+            <circle cx="198" cy="22" r="12" fill="#F2C4CE" opacity="0.85"/>
+            <circle cx="198" cy="22" r="7" fill="#F9D9DF" opacity="0.9"/>
+            <circle cx="198" cy="22" r="4" fill="#E8A0B0" opacity="0.8"/>
+            <ellipse cx="188" cy="14" rx="6" ry="4" fill="#F2C4CE" opacity="0.7" transform="rotate(-30 188 14)"/>
+            <ellipse cx="208" cy="14" rx="6" ry="4" fill="#F2C4CE" opacity="0.7" transform="rotate(30 208 14)"/>
+            <ellipse cx="190" cy="30" rx="6" ry="4" fill="#F2C4CE" opacity="0.65" transform="rotate(20 190 30)"/>
+            <ellipse cx="206" cy="30" rx="6" ry="4" fill="#F2C4CE" opacity="0.65" transform="rotate(-20 206 30)"/>
+            {/* Small center flower */}
+            <circle cx="130" cy="8" r="8" fill="#F9D9DF" opacity="0.8"/>
+            <circle cx="130" cy="8" r="4" fill="#E8A0B0" opacity="0.75"/>
+            {/* Small buds */}
+            <circle cx="105" cy="40" r="4" fill="#F2C4CE" opacity="0.7"/>
+            <circle cx="156" cy="38" r="4" fill="#F2C4CE" opacity="0.7"/>
+            <circle cx="42" cy="50" r="3" fill="#F9D9DF" opacity="0.6"/>
+            <circle cx="220" cy="45" r="3" fill="#F9D9DF" opacity="0.6"/>
+            {/* Berries */}
+            <circle cx="48" cy="72" r="3" fill="#C4A882" opacity="0.5"/>
+            <circle cx="215" cy="68" r="3" fill="#C4A882" opacity="0.5"/>
+            <circle cx="38" cy="65" r="2" fill="#C4A882" opacity="0.4"/>
+          </svg>
           <h2>תודה על המענה!</h2>
           <p>
             אני בטוחה שזה יסייע ויתן לי להכיר אתכם עוד קצת.<br />
             אם לא דיברנו בטלפון — בואו נקבע שיחה,<br />
             ואם תרצו להתחיל לרוץ יחד — נתחיל לתכנן לכם את היום המטורף הזה 🎊
           </p>
-          <a href={`https://wa.me/972508890134?text=${encodeURIComponent('יאללה שיר בואי נעשה חתונה ביחד!')}`} className="cf-btn cf-btn-primary" target="_blank" rel="noreferrer">
+          <a href={`https://wa.me/972508890134?text=${encodeURIComponent('יאללה שיר בואי נעשה חתונה ביחד')}`} className="cf-btn cf-btn-primary" target="_blank" rel="noreferrer">
             💬 דברו איתי בוואטסאפ
           </a>
         </div>
@@ -236,7 +281,6 @@ export const CoupleForm: React.FC = () => {
                   </div>
                   <input className="cf-input" placeholder={`שם פרטי של ה${data.partner1_role}`} value={data.partner1_name} onChange={e => set('partner1_name', e.target.value)} />
                   <input className="cf-input" placeholder="שם משפחה" value={data.partner1_last_name} onChange={e => set('partner1_last_name', e.target.value)} style={{ marginTop: 8 }} />
-                  <input className="cf-input" placeholder="מספר תעודת זהות" value={data.partner1_id} onChange={e => set('partner1_id', e.target.value)} style={{ marginTop: 8 }} />
                 </div>
                 <div>
                   <div className="cf-role-toggle">
@@ -245,7 +289,6 @@ export const CoupleForm: React.FC = () => {
                   </div>
                   <input className="cf-input" placeholder={`שם פרטי של ה${data.partner2_role}`} value={data.partner2_name} onChange={e => set('partner2_name', e.target.value)} />
                   <input className="cf-input" placeholder="שם משפחה" value={data.partner2_last_name} onChange={e => set('partner2_last_name', e.target.value)} style={{ marginTop: 8 }} />
-                  <input className="cf-input" placeholder="מספר תעודת זהות" value={data.partner2_id} onChange={e => set('partner2_id', e.target.value)} style={{ marginTop: 8 }} />
                 </div>
               </div>
             </div>
