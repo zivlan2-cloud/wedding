@@ -21,74 +21,114 @@
 
 /* ── Mobile: landing page ── */
 @media (max-width: 640px) {
-  /* Welcome screen: stack vertically, image on top */
+  /* Welcome screen: full-page scroll, image fixed at top */
   .cf-welcome {
     flex-direction: column;
+    min-height: 100vh;
+    overflow-y: auto;
+    position: relative;
   }
 
-  /* Image panel — compact hero at top */
+  /* ── Hero image: top ~50% of screen, fixed height ── */
   .cf-welcome-left {
     width: 100%;
-    height: 44vw;
-    min-height: 180px;
-    max-height: 260px;
+    height: 52vh;
+    min-height: 220px;
+    max-height: 340px;
     position: relative;
     flex-shrink: 0;
+    /* override the desktop absolute positioning */
+    overflow: hidden;
   }
 
-  /* Gradient overlay fades image into content below */
+  /* slides fill the image panel */
+  .cf-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center top;
+  }
+
+  /* soft bottom fade so image blends into white card below */
   .cf-welcome-left::after {
     background: linear-gradient(
       to bottom,
-      transparent 40%,
-      rgba(250,246,240,0.9) 100%
+      transparent 55%,
+      rgba(250,246,240,0.6) 80%,
+      rgba(250,246,240,1) 100%
     );
   }
 
-  /* Text panel fills remaining space */
-  .cf-welcome-right {
-    width: 100%;
-    padding: 28px 24px 40px;
-    align-items: center;
-    text-align: center;
+  /* slide dots sit inside image near bottom */
+  .cf-slide-dots {
+    bottom: 14px;
   }
 
-  /* Remove the side accent bar on mobile */
+  /* ── Content panel: white card that lifts over image bottom ── */
+  .cf-welcome-right {
+    width: 100%;
+    background: var(--cream);
+    border-radius: 28px 28px 0 0;
+    margin-top: -28px;          /* overlap image bottom */
+    position: relative;
+    z-index: 1;
+    padding: 32px 24px 48px;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 -4px 24px rgba(44,26,14,0.08);
+    flex: 1;
+  }
+
+  /* hide the thin desktop accent bar */
   .cf-welcome-right::before { display: none; }
+  .cf-welcome-right::after  { display: none; }
+
+  .cf-tagline {
+    font-size: 10px;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+  }
 
   .cf-welcome-title {
-    font-size: 34px;
+    font-size: 32px;
+    margin-bottom: 8px;
   }
 
   .cf-welcome-subtitle {
     font-size: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+  }
+
+  /* thin decorative divider */
+  .cf-divider {
+    margin-bottom: 16px;
   }
 
   .cf-welcome-text {
     font-size: 14px;
     max-width: 100%;
     margin-bottom: 28px;
+    line-height: 1.75;
   }
 
+  /* CTA button: full width, prominent */
   .cf-start-btn {
     width: 100%;
     justify-content: center;
-    font-size: 16px;
-    padding: 15px 20px;
+    font-size: 17px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
   }
 
+  /* Share bar: centered, wrapping */
   .cf-share-bar {
     justify-content: center;
+    flex-wrap: wrap;
     gap: 8px;
   }
 
-  /* Slide dots — still inside the image */
-  .cf-slide-dots {
-    bottom: 10px;
-  }
-
-  /* Form screen */
+  /* ── Form screen (step pages) ── */
   .cf-form-screen {
     padding: 16px;
     max-width: 100%;
