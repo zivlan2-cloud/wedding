@@ -324,6 +324,108 @@
   min-height: 100%;
 }
 
+/* ---- Couple grid view (main area) ---- */
+.admin-couples-grid-view {
+  padding: 8px 0;
+}
+
+.admin-grid-header {
+  margin-bottom: 24px;
+}
+
+.admin-grid-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+  border-bottom: 2.5px solid #999;
+  padding-bottom: 8px;
+  font-family: 'Georgia', serif;
+}
+
+.admin-grid-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.admin-grid-count {
+  font-size: 14px;
+  font-weight: 600;
+  background: rgba(0,0,0,0.08);
+  border-radius: 20px;
+  padding: 2px 10px;
+  color: inherit;
+}
+
+.admin-grid-empty {
+  color: #999;
+  text-align: center;
+  padding: 48px;
+  font-size: 16px;
+}
+
+.admin-couples-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.admin-couple-card {
+  background: white;
+  border-radius: 14px;
+  padding: 18px 18px 14px;
+  border-top: 3px solid #ccc;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.admin-couple-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+}
+
+.admin-couple-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2C1A0E;
+  font-family: 'Georgia', serif;
+}
+
+.admin-couple-card-date,
+.admin-couple-card-phone {
+  font-size: 12px;
+  color: #888;
+}
+
+.admin-couple-card-budget {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5a5a5a;
+  margin-top: 4px;
+}
+
+.admin-couple-card-arrow {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 8px;
+  text-align: left;
+  direction: ltr;
+  transition: color 0.15s;
+}
+
+.admin-couple-card:hover .admin-couple-card-arrow {
+  color: #6c63ff;
+}
+
 /* ---- Mobile responsive ---- */
 @media (max-width: 768px) {
   .admin-layout {

@@ -11,6 +11,12 @@ type Status = 'מתלבטים' | 'פעילים' | 'עבר'
 type MainSection = 'couples' | 'management'
 type ManagementTab = 'finance' | 'tasks' | 'meetings'
 
+const STATUS_COLORS: Record<Status, string> = {
+  'מתלבטים': '#f8961e',
+  'פעילים': '#6c63ff',
+  'עבר': '#90be6d',
+}
+
 const SLIDES = [
   '/images/1.jpeg',
   '/images/2.jpeg',
@@ -61,12 +67,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     'מתלבטים': couples.filter(c => (c.status || 'מתלבטים') === 'מתלבטים'),
     'פעילים': couples.filter(c => c.status === 'פעילים'),
     'עבר': couples.filter(c => c.status === 'עבר'),
-  }
-
-  const tabColors: Record<Status, string> = {
-    'מתלבטים': '#f8961e',
-    'פעילים': '#6c63ff',
-    'עבר': '#90be6d',
   }
 
   const totalBudget = couples.filter(c => c.status === 'פעילים').reduce((s, c) => s + (c.budget || 0), 0)
@@ -140,10 +140,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                 <button
                   key={tab}
                   className={`admin-tab ${activeTab === tab ? 'active' : ''}`}
-                  style={activeTab === tab ? { borderColor: tabColors[tab], color: tabColors[tab] } : {}}
+                  style={activeTab === tab ? { borderColor: STATUS_COLORS[tab], color: STATUS_COLORS[tab] } : {}}
                   onClick={() => { setActiveTab(tab); setSelected(null) }}
                 >
-                  <span className="tab-dot" style={{ background: tabColors[tab] }} />
+                  <span className="tab-dot" style={{ background: STATUS_COLORS[tab] }} />
                   {tab}
                   <span className="tab-count">{grouped[tab].length}</span>
                 </button>
@@ -229,8 +229,47 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               }}
             />
           ) : (
-            <div className="admin-placeholder">
-              <p>בחרי זוג מהרשימה לצפייה בפרופיל</p>
+            <div className="admin-couples-grid-view">
+              <div className="admin-grid-header">
+                <div className="admin-grid-title" style={{ borderColor: STATUS_COLORS[activeTab], color: STATUS_COLORS[activeTab] }}>
+                  <span className="admin-grid-dot" style={{ background: STATUS_COLORS[activeTab] }} />
+                  {activeTab}
+                  <span className="admin-grid-count">{grouped[activeTab].length}</span>
+                </div>
+              </div>
+              {grouped[activeTab].filter(c =>
+                (c.couple_name || `${c.partner1_name} ו${c.partner2_name}`).toLowerCase().includes(search.toLowerCase())
+              ).length === 0 && !loading && (
+                <div className="admin-grid-empty">אין זוגות בקטגוריה זו</div>
+              )}
+              <div className="admin-couples-grid">
+                {grouped[activeTab].filter(c =>
+                  (c.couple_name || `${c.partner1_name} ו${c.partner2_name}`).toLowerCase().includes(search.toLowerCase())
+                ).map(couple => (
+                  <div
+                    key={couple.id}
+                    className="admin-couple-card"
+                    onClick={() => setSelected(couple)}
+                    style={{ borderTopColor: STATUS_COLORS[activeTab] }}
+                  >
+                    <div className="admin-couple-card-name">
+                      {couple.couple_name || `${couple.partner1_name} ו${couple.partner2_name}`}
+                    </div>
+                    {couple.event_date && couple.event_date !== '2099-01-01' && (
+                      <div className="admin-couple-card-date">
+                        📅 {new Date(couple.event_date).toLocaleDateString('he-IL')}
+                      </div>
+                    )}
+                    {couple.phone && (
+                      <div className="admin-couple-card-phone">📞 {couple.phone}</div>
+                    )}
+                    {couple.budget > 0 && (
+                      <div className="admin-couple-card-budget">₪{couple.budget.toLocaleString()}</div>
+                    )}
+                    <div className="admin-couple-card-arrow">פתח פרופיל ›</div>
+                  </div>
+                ))}
+              </div>
             </div>
           )
         ) : (
