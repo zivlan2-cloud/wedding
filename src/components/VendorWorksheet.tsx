@@ -209,8 +209,9 @@ export const VendorWorksheet: React.FC<VendorWorksheetProps> = ({
       setForm(emptyVendor())
       setEditingId(null)
       setShowForm(false)
-    } catch (err) {
-      alert('שגיאה בשמירה: ' + (err instanceof Error ? err.message : String(err)))
+    } catch (err: any) {
+      const msg = err?.message || err?.error_description || JSON.stringify(err)
+      alert('שגיאה בשמירה: ' + msg)
     } finally {
       setLoading(false)
     }
