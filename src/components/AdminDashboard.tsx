@@ -153,7 +153,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       status: addForm.status,
       couple_link_token: token,
     }]).select().single()
-    if (!error && data) {
+    if (error) {
+      alert('שגיאה: ' + error.message)
+      setAddSaving(false)
+      return
+    }
+    if (data) {
       setCouples(prev => [data, ...prev])
       setActiveTab(addForm.status)
       setSelected(data)
