@@ -19,6 +19,129 @@
   overflow: hidden;
 }
 
+/* ── Mobile: landing page ── */
+@media (max-width: 640px) {
+  /* Welcome screen: stack vertically, image on top */
+  .cf-welcome {
+    flex-direction: column;
+  }
+
+  /* Image panel — compact hero at top */
+  .cf-welcome-left {
+    width: 100%;
+    height: 44vw;
+    min-height: 180px;
+    max-height: 260px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  /* Gradient overlay fades image into content below */
+  .cf-welcome-left::after {
+    background: linear-gradient(
+      to bottom,
+      transparent 40%,
+      rgba(250,246,240,0.9) 100%
+    );
+  }
+
+  /* Text panel fills remaining space */
+  .cf-welcome-right {
+    width: 100%;
+    padding: 28px 24px 40px;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Remove the side accent bar on mobile */
+  .cf-welcome-right::before { display: none; }
+
+  .cf-welcome-title {
+    font-size: 34px;
+  }
+
+  .cf-welcome-subtitle {
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
+  .cf-welcome-text {
+    font-size: 14px;
+    max-width: 100%;
+    margin-bottom: 28px;
+  }
+
+  .cf-start-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 16px;
+    padding: 15px 20px;
+  }
+
+  .cf-share-bar {
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* Slide dots — still inside the image */
+  .cf-slide-dots {
+    bottom: 10px;
+  }
+
+  /* Form screen */
+  .cf-form-screen {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .cf-card {
+    padding: 22px 20px;
+    border-radius: 18px;
+  }
+
+  .cf-question {
+    font-size: 17px;
+    margin-bottom: 18px;
+  }
+
+  .cf-fields-row,
+  .cf-name-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .cf-radio-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cf-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .cf-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .cf-btn-back {
+    text-align: center;
+  }
+
+  /* Thank you card */
+  .cf-thank-card {
+    padding: 36px 24px;
+    border-radius: 20px;
+    margin: 16px;
+  }
+
+  .cf-thank-card h2 {
+    font-size: 22px;
+  }
+}
+
 /* ── Welcome screen ── */
 .cf-welcome {
   display: flex;

@@ -428,46 +428,112 @@
   }
 
   .cwp-container {
-    padding: 32px 16px 64px;
+    padding: 28px 14px 60px;
+  }
+
+  /* Header */
+  .cwp-brand {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  .cwp-header {
+    margin-bottom: 28px;
   }
 
   .cwp-header h1 {
-    font-size: 26px;
+    font-size: 24px;
+    margin-bottom: 10px;
   }
 
   .cwp-header p {
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1.7;
   }
 
+  /* Summary strip: 2×2 grid on mobile */
   .cwp-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
+    margin-bottom: 18px;
   }
 
   .cwp-sum-item {
-    min-width: 120px;
-    padding: 14px 16px;
+    min-width: unset;
+    padding: 14px 12px;
+    border-radius: 16px;
+  }
+
+  .cwp-sum-item label {
+    font-size: 9px;
+    letter-spacing: 1.2px;
   }
 
   .cwp-sum-item span {
     font-size: 20px;
   }
 
+  /* Cards */
   .cwp-card {
-    padding: 20px 18px;
+    padding: 18px 16px;
     border-radius: 18px;
+    margin-bottom: 14px;
   }
 
   .cwp-card::before {
-    width: 4px;
+    width: 3px;
   }
 
-  .cwp-tabs {
+  .cwp-card h2 {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  /* Edit form: single column on mobile */
+  .cwp-edit-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .cwp-save-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Date highlight */
+  .cwp-date-highlight {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 6px;
+    padding: 10px 14px;
   }
 
-  .cwp-tab-btn {
-    padding: 9px 12px;
-    font-size: 13px;
+  .cwp-date-value {
+    font-size: 15px;
+  }
+
+  /* Doc zone */
+  .cwp-doc-zone {
+    padding: 16px 14px;
+  }
+
+  .cwp-upload-btn {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  /* Footer */
+  .cwp-footer {
+    padding-top: 14px;
+    gap: 10px;
+  }
+
+  .cwp-wa-link {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
   }
 }
 

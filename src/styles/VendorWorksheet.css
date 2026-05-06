@@ -447,29 +447,67 @@
 .vw-vendor-wa:hover { opacity: 1; }
 
 @media (max-width: 640px) {
+  /* Table: allow horizontal scroll, compact padding */
   .vw-table-wrap {
-    font-size: 13px;
+    font-size: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .vw-table th,
   .vw-table td {
-    padding: 9px 8px;
+    padding: 9px 7px;
+    white-space: nowrap;
   }
 
+  /* Drag handle column is wasted space on mobile */
+  .vw-drag-col,
+  .vw-drag-handle { display: none; }
+
+  .vw-drag-hint { display: none; }
+
+  /* Add-vendor form: single column */
+  .vw-form {
+    padding: 14px 12px;
+  }
+
+  .vw-form-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .vw-form-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .vw-form-actions button {
+    width: 100%;
+  }
+
+  /* Guest row */
   .vw-guests-row {
     flex-wrap: wrap;
     gap: 8px;
   }
 
+  /* Actions row */
   .vw-actions-row {
     flex-direction: column;
   }
 
+  /* Default-vendor pills: wrap freely */
   .vw-defaults-btns {
     flex-wrap: wrap;
     gap: 6px;
   }
 
+  .vw-default-btn {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  /* Payment rows */
   .vw-payment-row {
     flex-direction: column;
     gap: 10px;
@@ -481,15 +519,16 @@
     width: 100%;
   }
 
-  .vw-form-row {
-    flex-direction: column;
-    gap: 10px;
-  }
-
+  /* Balance bar */
   .vw-balance-bar {
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
+  }
+
+  /* VAT summary */
+  .vw-vat-summary {
+    padding: 10px 12px;
   }
 }
 
