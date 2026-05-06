@@ -43,7 +43,9 @@ export const ContractGenerator: React.FC<ContractGeneratorProps> = ({ couple, on
     if (!printWin) { alert('אנא אפשרי חלונות קופצים עבור אתר זה'); return }
 
     const f = fields
-    const feeStr = f.fee ? `₪${Number(f.fee).toLocaleString()}` : '________'
+    const feeNum = parseFloat(f.fee) || 0
+    const feeStr = feeNum ? `${feeNum.toLocaleString()} ₪` : '________'
+    const remainStr = feeNum ? `${(feeNum - 2000).toLocaleString()} ₪` : '________'
     const eventDateStr = formatDate(f.event_date)
     const sigUrl = `${window.location.origin}/images/signature_shir.png`
 
@@ -55,181 +57,179 @@ export const ContractGenerator: React.FC<ContractGeneratorProps> = ({ couple, on
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Heebo', Arial, sans-serif;
-    font-size: 11pt;
-    color: #111;
-    direction: rtl;
-    background: white;
-    padding: 0;
-  }
-  .page {
-    width: 210mm;
-    min-height: 297mm;
-    padding: 18mm 20mm 18mm 20mm;
-    margin: 0 auto;
-  }
+  body { font-family: 'Heebo', Arial, sans-serif; font-size: 10.5pt; color: #111; direction: rtl; background: white; }
+  .page { width: 210mm; min-height: 297mm; padding: 16mm 22mm; margin: 0 auto; }
   @media print {
-    .page {
-      page-break-after: always;
-      margin: 0;
-      width: 100%;
-    }
+    .page { page-break-after: always; margin: 0; width: 100%; }
     .page:last-child { page-break-after: avoid; }
-  }
-  h1 {
-    font-size: 17pt;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 6px;
-    letter-spacing: 1px;
-  }
-  .subtitle {
-    text-align: center;
-    font-size: 10pt;
-    color: #666;
-    margin-bottom: 14px;
-  }
-  hr { border: none; border-top: 1px solid #bbb; margin: 10px 0; }
-  .parties { margin: 12px 0; font-size: 10.5pt; line-height: 1.8; }
-  .parties strong { font-weight: 700; }
-  .section { margin: 14px 0 4px; font-size: 10pt; line-height: 1.85; }
-  .section p { margin-bottom: 6px; text-align: justify; }
-  .sig-area {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 36px;
-    gap: 40px;
-  }
-  .sig-box {
-    flex: 1;
-    border-top: 1.5px solid #555;
-    padding-top: 8px;
-    font-size: 9.5pt;
-    color: #444;
-    text-align: center;
-    min-height: 70px;
-    position: relative;
-  }
-  .sig-img {
-    position: absolute;
-    top: -44px;
-    right: 50%;
-    transform: translateX(50%);
-    height: 40px;
-    width: auto;
-  }
-  .appendix-title {
-    font-size: 14pt;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 8px;
-  }
-  .appendix-list { margin: 12px 0; padding-right: 18px; }
-  .appendix-list li { margin-bottom: 8px; font-size: 10.5pt; line-height: 1.7; }
-  .payment-note { margin-top: 16px; font-weight: 700; font-size: 10.5pt; }
-  @media print {
-    body { padding: 0; }
-    .page { margin: 0; width: 100%; }
     .no-print { display: none !important; }
   }
-  .print-bar {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    background: #2a1f1f;
-    color: white;
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    z-index: 999;
-    font-family: 'Heebo', Arial, sans-serif;
-    font-size: 14px;
-  }
-  .print-bar span { opacity: 0.8; font-size: 13px; }
-  .print-btn {
-    padding: 9px 22px;
-    background: #c9a07a;
-    color: white;
-    border: none;
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: 'Heebo', Arial, sans-serif;
-  }
-  .print-btn:hover { background: #b08060; }
-  .page-wrap { margin-top: 56px; }
+  h1 { font-size: 14pt; font-weight: 700; text-align: center; margin-bottom: 4px; }
+  hr { border: none; border-top: 1px solid #888; margin: 8px 0; }
+  .intro { font-size: 10pt; margin: 10px 0 6px; line-height: 1.7; }
+  .party-block { margin: 6px 0 6px 0; line-height: 2; font-size: 10pt; }
+  .party-block .party-label { font-weight: 700; display: inline-block; min-width: 52px; }
+  .between { font-size: 10pt; margin: 8px 0; font-weight: 600; }
+  ol { padding-right: 22px; margin: 10px 0; }
+  ol li { margin-bottom: 7px; line-height: 1.75; font-size: 10pt; text-align: justify; }
+  ol li ol { margin-top: 5px; }
+  .sig-area { display: flex; justify-content: space-between; margin-top: 30px; gap: 40px; }
+  .sig-box { flex: 1; text-align: center; position: relative; padding-top: 50px; font-size: 9.5pt; color: #333; }
+  .sig-line { border-top: 1px solid #555; margin-bottom: 6px; }
+  .sig-img { position: absolute; top: 4px; left: 50%; transform: translateX(-50%); height: 42px; width: auto; }
+  .appendix-title { font-size: 13pt; font-weight: 700; text-align: center; margin-bottom: 6px; }
+  .appendix-section { font-weight: 700; margin: 12px 0 4px; font-size: 10.5pt; }
+  ul.app-list { padding-right: 20px; margin: 4px 0 10px; }
+  ul.app-list li { margin-bottom: 6px; line-height: 1.7; font-size: 10pt; }
+  ul.app-list li ul { margin-top: 4px; }
+  .final-sig { display: flex; justify-content: space-between; margin-top: 28px; gap: 30px; }
+  .final-sig-box { flex: 1; text-align: center; }
+  .final-sig-line { border-top: 1px solid #555; margin-bottom: 5px; }
+  .final-sig-name { font-size: 9.5pt; color: #333; }
+  .final-sig-role { font-size: 9pt; color: #666; }
+  .yalla { text-align: center; font-size: 11pt; font-weight: 700; margin: 22px 0 10px; }
+  .print-bar { position: fixed; top: 0; left: 0; right: 0; background: #2a1f1f; color: white; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 999; font-family: 'Heebo', Arial, sans-serif; font-size: 13px; }
+  .print-btn { padding: 8px 20px; background: #c9a07a; color: white; border: none; border-radius: 30px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .page-wrap { margin-top: 50px; }
 </style>
 </head>
 <body>
 <div class="print-bar no-print">
-  <span>חוזה — ${f.partner1_name} ו${f.partner2_name} &nbsp;|&nbsp; לחצי הדפס ובחרי "שמור כ-PDF" כדי לשמור</span>
+  <span>חוזה — ${f.partner1_name} ו${f.partner2_name} &nbsp;|&nbsp; לחצי "הדפס" ובחרי "שמור כ-PDF"</span>
   <button class="print-btn" onclick="window.print()">🖨️ הדפס / שמור כ-PDF</button>
 </div>
-
 <div class="page-wrap">
-<!-- דף 1 -->
+
+<!-- דף 1 — החוזה -->
 <div class="page">
   <h1>הסכם למתן שירותי הפקה</h1>
-  <div class="subtitle">נחתם ביום ${f.sign_day} בחודש ${f.sign_month} ${f.sign_year}</div>
-  <hr/>
+  <p class="intro">שנערך ונחתם ביום ${f.sign_day} בחודש ${f.sign_month} ${f.sign_year}</p>
+  <p class="between">בין</p>
 
-  <div class="parties">
-    <strong>מנהלת האירוע:</strong> שיר מילוא לנגלייב &nbsp;|&nbsp; ת.ז 301429577 &nbsp;|&nbsp; קיבוץ דפנה<br/>
-    <strong>המזמינים:</strong>
-    ${f.partner1_name} &nbsp; ת.ז ${f.partner1_id || '________'} &nbsp;&nbsp;|&nbsp;&nbsp;
-    ${f.partner2_name} &nbsp; ת.ז ${f.partner2_id || '________'}<br/>
-    <strong>כתובת:</strong> ${f.address_street || '___________'}, ${f.address_city || '___________'}
+  <div class="party-block">
+    <span class="party-label"></span>שיר מילוא לנגלייב<br/>
+    <span class="party-label"></span>ת.ז 301429577<br/>
+    <span class="party-label"></span>מרחוב ___ ב קיבוץ דפנה<br/>
+    <span class="party-label"></span>(להלן: ה"מנהלת האירוע")
   </div>
 
-  <hr/>
+  <p class="between">מצד אחד; לבין</p>
 
-  <div class="section">
-    <p><strong>1.</strong> הסכם זה מסדיר את שירותי ניהול, תיאום, בקרה ופיקוח של מנהלת האירוע באירוע מסוג חתונה, בתאריך ${eventDateStr}, ב${f.venue || '_______________'}.</p>
-    <p><strong>2.</strong> בגין השירותים ישלמו המזמינים למנהלת האירוע ${feeStr}. התמורה תשולם בהעברה בנקאית (ראה נספח א').</p>
-    <p><strong>3.</strong> ביום האירוע תהא מנהלת האירוע אחראית לתיאום הספקים שנבחרו על ידי המזמינים. המזמינים מצהירים כי הספקים נבחרו על ידם ולא תהיה להם טענה כלפי מנהלת האירוע בנוגע לטיב עבודתם.</p>
-    <p><strong>4.</strong> המזמינים אחראים לדאוג, על חשבונם, לביטוח אשר יכסה כל נזק לרכוש ו/או לגוף הקשור לאירוע.</p>
-    <p><strong>5.</strong> המזמינים לוקחים אחריות מלאה על שטח האירוע, כולל אישורים, היתרים ורישיונות.</p>
-    <p><strong>6.</strong> מנהלת האירוע לא תהיה אחראית לנזקים שיגרמו מכח עליון, ממעשי המזמינים, הספקים או צדדים שלישיים.</p>
-    <p><strong>7.</strong> ביטול עד 30 יום לפני האירוע — ללא פיצוי. ביטול 29–8 ימים לפני — 50% מהתמורה. ביטול ביום האירוע — מלוא התמורה.</p>
-    <p><strong>8.</strong> במקרה של דחייה עקב נסיבות חריגות (בידוד/מצב ביטחוני/רפואי), יתואם תאריך חלופי מוסכם.</p>
+  <div class="party-block">
+    <span class="party-label"></span>${f.partner1_name} ו${f.partner2_name}<br/>
+    <span class="party-label"></span>ת.ז ${f.partner1_id || '________________'} ו${f.partner2_id || '________________'} (בהתאמה)<br/>
+    <span class="party-label"></span>מרחוב ${f.address_street || '________'} ב${f.address_city || '________'}<br/>
+    <span class="party-label"></span>(להלן ביחד ולחוד: ה"מזמינים")
   </div>
 
+  <p class="between">מצד שני;</p>
   <hr/>
+  <p class="between">הוסכם והותנה בין הצדדים כדלקמן:</p>
+
+  <ol>
+    <li>הסכם זה מטרתו להסדיר את גבולות אחריותה של מנהלת האירוע במסגרת התחייבותה למתן שירותי ניהול, תיאום, בקרה, ופיקוח על פעילותם של הגורמים המעורבים (להלן: ה"שירותים") באירוע מסוג חתונה, בתאריך <strong>${eventDateStr}</strong> (להלן: ה"אירוע") ב – <strong>${f.venue || '______________________________'}</strong> (להלן: ה"מתחם" או ה"שטח").</li>
+    <li>בגין השירותים ישלמו המזמינים למנהלת האירוע <strong>${feeStr}</strong> (להלן: "התמורה"). התמורה תשולם למנהלת האירוע באמצעות העברה בנקאית (ראה פירוט בנספח א׳, סעיף: תשלום).</li>
+    <li>ביום האירוע תהא מנהלת האירוע אחראית לעמוד בקשר עם נותני השירותים, הקבלנים והספקים שנבחרו על ידי המזמינים לרבות שירותי הקייטרינג, מוזיקה, צלמים, עיצוב, חשמל, ציוד ואחרים (להלן: "ספקים באירוע"). יובהר כי כלל הספקים באירוע נבחרו על ידי המזמינים ולמזמינים לא תהיה כל טענה ו/או דרישה ו/או תביעה כלפי מנהלת האירוע בעניין טיב עבודת הספקים באירוע.</li>
+    <li>המזמינים אחראים לדאוג, על חשבונם, לביטוח אשר יכסה, באופן סביר, כל נזק לרכוש ו/או לגוף שיגרם למי ממוזמני האירוע, ו/או למנהלת האירוע ו/או למי מהצוות שאיתה ו/או למי מהספקים באירוע ו/או לעובדיהם, בקשר לאירוע ובמהלכו.</li>
+    <li>המזמינים לוקחים בזאת אחריות מלאה על הקרקע בה יתקיים האירוע וככל שהאירוע יתקיים במתחם סגור, גם על מתחם האירוע. המזמינים פוטרים בזאת את מנהלת האירוע מכל אחריות בנוגע לתקינות השטח ו/או המתחם וקיום אישורים, היתרים או רישיונות שיכול ונדרשים לקיום האירוע.</li>
+    <li>יובהר כי במידה ובשטח האירוע תימצא בריכה, מנהלת האירוע אינה אחראית על כל נזק בגוף ו/או ברכוש שיגרם בגין שימוש בבריכה והמזמינים הינם האחראים הבלעדיים לעמידה בדרישות החוק בהקשר זה.</li>
+    <li>הצדדים מסכימים כי מנהלת האירוע לא תהיה אחראית לשום נזק גוף ו/או רכוש ו/או אובדן ו/או הפסד העלולים להיגרם לספקים ו/או לעובדיהם ו/או למי מטעמם ו/או למי מהמשתתפים באירוע ו/או לצד שלישי כלשהו כתוצאה ממעשה או מחדל של המזמינים ו/או קבלנים ו/או קבלני משנה ועובדיהם הנוטלים חלק בעריכת האירוע.</li>
+    <li>המזמינים פוטרים בזאת את המנהלת האירוע ומי מטעמה מכל אחריות לגבי נזקים כאמור ומתחייבים לשפות את הנ"ל על כל סכום שיחויבו לשלם עקב נזקים כאמור לרבות הוצאות ושכ"ט עו"ד.</li>
+    <li>המזמינים יהיו האחראים לבטיחות כל הציוד ו/או המתקנים המשמשים לצורך האירוע לרבות אם מדובר במתקני קבע או מתקנים ארעיים.</li>
+    <li>יובהר כי לא יתקיימו בין המזמינים למנהלת האירוע יחסי עובד מעביד וכן לא יתקיימו יחסי עובד מעביד בין המנהלת האירוע לבין קבלנים ועובדי קבלן אחרים באירוע.</li>
+    <li>במקרה והמזמינים יבטלו את הזמנת האירוע מכל סיבה שהיא לאחר החתימה על הסכם זה, יחויבו המזמינים בתמורה בגין מתן שירותים טרום האירוע ויידרשו להעבירה במלואה תוך 7 ימים ממתן ההודעה על ביטול ההסכם.</li>
+    <li>בנוסף לאמור בסעיף 11, במקרה והמזמינים יבטלו את הזמנת האירוע, פרט לסיבת כח עליון, ישלמו המזמינים למנהלת האירוע פיצוי מוסכם כדלהלן:
+      <ol type="1" style="list-style-type: decimal;">
+        <li>ביטול עד 30 יום לפני מועד האירוע — לא יחויב בתשלום פיצוי.</li>
+        <li>ביטול 29 ימים או פחות אך לא פחות מ-8 ימים לפני — 50% מהתמורה בגין האירוע עצמו.</li>
+        <li>ביטול ביום האירוע — מלוא התמורה.</li>
+        <li>הודעת ביטול תיחשב רק הודעה שנמסרה בכתב ואושרה קבלה.</li>
+        <li>במידה והאירוע יידחה עקב נסיבות חריגות (בידוד/מצב ביטחוני/רפואי) תהיה אפשרות לדחייה לתאריך חלופי מוסכם.</li>
+      </ol>
+    </li>
+  </ol>
+
+  <p style="margin-top:14px; font-size:10pt;">ולראיה באנו אנו על ידי החתום:</p>
 
   <div class="sig-area">
     <div class="sig-box">
       <img class="sig-img" src="${sigUrl}" alt="חתימת שיר" onerror="this.style.display='none'"/>
-      <div>שיר מילוא לנגלייב</div>
+      <div class="sig-line"></div>
       <div>מנהלת האירוע</div>
     </div>
     <div class="sig-box">
-      <div>${f.partner1_name} ו${f.partner2_name}</div>
+      <div class="sig-line"></div>
+      <div>${f.partner1_name} ו- ${f.partner2_name}</div>
       <div>המזמינים</div>
     </div>
   </div>
 </div>
 
-<!-- דף 2 -->
+<!-- דף 2 — נספח א' -->
 <div class="page">
-  <div class="appendix-title">נספח א' — פירוט עבודת מנהלת התהליך</div>
+  <div class="appendix-title">נספח א׳</div>
+  <div class="appendix-title" style="font-size:11pt; font-weight:600; margin-bottom:10px;">פירוט עבודת מנהלת התהליך</div>
   <hr/>
-  <ul class="appendix-list">
-    <li>פגישה ראשונית פנים מול פנים בשטח החתונה — דמיון האירוע וסקיצה ראשונית.</li>
-    <li>מעבר על חוזי ספקים אופציונאליים והחזרת הערות.</li>
-    <li>זמינות טלפונית מלאה לכל שאלה — כולל תמיכה נפשית ברגעים מאתגרים.</li>
-    <li>פגישת ספקים בשטח האירוע (עד חודש לפני האירוע).</li>
-    <li>שיחת העברת מקל — חוזים מפורטים, שעות הגעה, טלפונים, דגשים לוגיסטיים.</li>
-    <li>הגעה לשטח עם הספק הראשון (לא מעל 6 שעות לפני תחילת האירוע).</li>
-    <li>פריסה ומיקום ספקים בשטח, פתרון בעיות ומשברים, ניהול עובדי הפקה.</li>
-    <li>וידוא כי הזוג מקבל ארוחה ויושב לאכול לפני תחילת האירוע.</li>
-    <li>ניהול ותכלול כלל הספקים וההתרחשות לאורך כל האירוע.</li>
+
+  <p style="font-size:10pt; margin-bottom:8px;">(לאחר חתימה על הסכם זה):</p>
+
+  <ul class="app-list">
+    <li>פגישה ראשונית שלנו, פנים מול פנים, בשטח החתונה העתידית. נדמיין את האירוע ונתכנן סקיצה ראשונית.</li>
+    <li>מעבר על חוזים שסופקו על ידי הספקים האופציונאליים והחזרת הערות.</li>
+    <li>זמינות טלפונית מלאה לכל שאלה ועניין — וכמובן תמיכה נפשית ברגעים מאתגרים.</li>
+    <li>פגישת ספקים (עד חודש לפני האירוע). פגישה של הספקים שלוקחים חלק באירוע, בשטח האירוע.</li>
+    <li>שיחת העברת מקל: העברת מידע מסודרת — חוזים מפורטים, שעות הגעה, מספרי טלפון, דגשים לוגיסטיים ועיצוביים.</li>
+    <li><strong>ניהול האירוע:</strong>
+      <ul>
+        <li>הגעה לשטח עם הגעת הספק הראשון, אך לא מעל 6 שעות לפני תחילת האירוע.</li>
+        <li>פריסה ומיקום הספקים בשטח האירוע.</li>
+        <li>פתרון בעיות, בל"תמים ומשברים.</li>
+        <li>ניהול עובדי הפקה.</li>
+        <li>וידוא כי הזוג מקבל ארוחה ויושב לאכול לפני תחילת האירוע.</li>
+        <li>ניהול ותכלול כלל הספקים וההתרחשות לאורך כל האירוע.</li>
+        <li>כספת: ריקון הכספת יתבצע על ידי איש קשר מטעם הזוג שיקבע מראש.</li>
+        <li>תשלום לספקים: חלוקת מעטפות התשלום לספקים בסיום האירוע תתבצע על ידי שיר (מעטפות סגורות בלבד).</li>
+        <li>פירוקים: קיפול השטח ווידוא השארתו נקי לפני שחרור כל ספק.</li>
+      </ul>
+    </li>
   </ul>
+
   <hr/>
-  <div class="payment-note">תשלום: העברה בנקאית. לוח תשלומים כמוסכם בין הצדדים.</div>
+
+  <div class="appendix-section">תשלום (הבהרה לסעיף 2 בחוזה):</div>
+  <ul class="app-list">
+    <li><strong>הפקה וניהול אירוע:</strong>
+      <ul>
+        <li>מקדמה על סך <strong>2,000 ₪</strong> על מנת לשריין את תאריך האירוע.</li>
+        <li>שאר הסכום — <strong>${remainStr}</strong> — ישולם עד לשלושה ימים לאחר האירוע.</li>
+        <li>התשלומים יבוצעו בהעברה בנקאית לחשבון: <strong>153749, סניף 462 (טבריה)</strong> עבור: שיר מילוא.</li>
+        <li>אין צורך בתשלום מע"מ. (המחיר לא כולל את עובדי ההפקה).</li>
+      </ul>
+    </li>
+    <li><strong>עובדי הפקה:</strong>
+      <ul>
+        <li>ההחלטה על כמות העובדים תעשה לאחר פגישת הספקים.</li>
+        <li>עלות כל עובד: <strong>700 ₪</strong> — התשלום יתבצע בסיום האירוע במזומן, ישירות על ידי הזוג.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="yalla">יאללה, שנצא לדרך? 🎉</div>
+
+  <div class="final-sig">
+    <div class="final-sig-box">
+      <div class="final-sig-line"></div>
+      <div class="final-sig-name">שיר מילוא לנגלייב</div>
+      <div class="final-sig-role">מנהלת האירוע</div>
+    </div>
+    <div class="final-sig-box">
+      <div class="final-sig-line"></div>
+      <div class="final-sig-name">${f.partner1_name} ו- ${f.partner2_name}</div>
+      <div class="final-sig-role">המזמינים</div>
+    </div>
+  </div>
 </div>
+
 </div>
 </body>
 </html>`
