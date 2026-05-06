@@ -174,17 +174,28 @@ export const VendorWorksheet: React.FC<VendorWorksheetProps> = ({
         sort_order: editingId ? undefined : vendors.length,
       }
 
+      const tryWithoutVatCol = async (p: Record<string, any>) => {
+        const { contract_includes_vat: _civ, ...without } = p
+        return supabase.from('vendors').insert([without]).select()
+      }
+
       if (editingId) {
         const { data, error } = await supabase.from('vendors').update(payload).eq('id', editingId).select()
-        if (error) throw error
-        if (data) onVendorsChange(vendors.map(v => v.id === editingId ? data[0] : v))
+        if (error) {
+          if (error.message?.includes('contract_includes_vat')) {
+            const { contract_includes_vat: _civ, ...without } = payload
+            const { data: d2, error: e2 } = await supabase.from('vendors').update(without).eq('id', editingId).select()
+            if (e2) throw e2
+            if (d2) onVendorsChange(vendors.map(v => v.id === editingId ? d2[0] : v))
+          } else throw error
+        } else if (data) {
+          onVendorsChange(vendors.map(v => v.id === editingId ? data[0] : v))
+        }
       } else {
         const { data, error } = await supabase.from('vendors').insert([payload]).select()
         if (error) {
-          // If contract_includes_vat column doesn't exist yet, retry without it
-          if (error.message?.includes('contract_includes_vat')) {
-            const { contract_includes_vat: _, ...payloadWithout } = payload
-            const { data: data2, error: error2 } = await supabase.from('vendors').insert([payloadWithout]).select()
+          if (error.message?.includes('contract_includes_vat') || error.code === '42703') {
+            const { data: data2, error: error2 } = await tryWithoutVatCol(payload)
             if (error2) throw error2
             if (data2) onVendorsChange([...vendors, data2[0]])
           } else {

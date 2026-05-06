@@ -68,9 +68,15 @@ export const ContractGenerator: React.FC<ContractGeneratorProps> = ({ couple, on
     min-height: 297mm;
     padding: 18mm 20mm 18mm 20mm;
     margin: 0 auto;
-    page-break-after: always;
   }
-  .page:last-child { page-break-after: avoid; }
+  @media print {
+    .page {
+      page-break-after: always;
+      margin: 0;
+      width: 100%;
+    }
+    .page:last-child { page-break-after: avoid; }
+  }
   h1 {
     font-size: 17pt;
     font-weight: 700;
