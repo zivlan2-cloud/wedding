@@ -1,0 +1,132 @@
+.wt-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.96);
+  border-radius: 16px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+
+.wt-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #c9a07a;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 4px 0;
+}
+
+.wt-scroll {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  flex: 1;
+  align-items: center;
+  scrollbar-width: none;
+  padding: 4px 0;
+}
+.wt-scroll::-webkit-scrollbar { display: none; }
+
+.wt-item {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.wt-connector {
+  width: 32px;
+  height: 2px;
+  background: linear-gradient(90deg, #e0d0c0, #c9a07a);
+  flex-shrink: 0;
+}
+
+.wt-item:first-child .wt-connector {
+  width: 0;
+}
+
+.wt-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #c9a07a;
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px #c9a07a;
+  flex-shrink: 0;
+  margin-left: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.wt-item-next .wt-dot {
+  background: #6c63ff;
+  box-shadow: 0 0 0 2px #6c63ff;
+  width: 13px;
+  height: 13px;
+}
+
+.wt-card {
+  background: #faf8f5;
+  border: 1.5px solid #e8ddd0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-right: 8px;
+  min-width: 140px;
+  cursor: default;
+  transition: box-shadow 0.15s;
+}
+
+.wt-item-next .wt-card {
+  border-color: #6c63ff;
+  background: #f5f4ff;
+  box-shadow: 0 3px 12px rgba(108,99,255,0.15);
+}
+
+.wt-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.wt-couple {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2C1A0E;
+  font-family: 'Georgia', serif;
+  margin-bottom: 3px;
+  white-space: nowrap;
+}
+
+.wt-date {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 2px;
+}
+
+.wt-venue {
+  font-size: 11px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.wt-days {
+  font-size: 11px;
+  font-weight: 700;
+  color: #c9a07a;
+  margin-top: 4px;
+}
+
+.wt-days-soon {
+  color: #e63946;
+}
+
+.wt-item-next .wt-days {
+  color: #6c63ff;
+}

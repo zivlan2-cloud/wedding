@@ -5,6 +5,7 @@ import { CoupleProfile } from './CoupleProfile'
 import { ShirFinance } from './ShirFinance'
 import { ShirTasks } from './ShirTasks'
 import { ShirMeetings } from './ShirMeetings'
+import { WeddingTimeline } from './WeddingTimeline'
 import '../styles/AdminDashboard.css'
 
 type Status = 'מתלבטים' | 'פעילים' | 'עבר'
@@ -274,6 +275,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
           )
         ) : (
           <div className="admin-management-view">
+            <WeddingTimeline couples={couples} />
             {managementTab === 'finance' && (
               <ShirFinance couples={couples} />
             )}
