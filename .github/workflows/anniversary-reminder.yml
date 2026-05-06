@@ -1,0 +1,78 @@
+name: Anniversary Reminder Email
+
+on:
+  schedule:
+    # Every day at 07:00 Israel time (04:00 UTC)
+    - cron: '0 4 * * *'
+  workflow_dispatch: # allows manual trigger from GitHub UI
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check anniversaries and send email
+        run: |
+          node -e "
+          const SUPABASE_URL = '${{ secrets.VITE_SUPABASE_URL }}';
+          const SUPABASE_KEY = '${{ secrets.VITE_SUPABASE_ANON_KEY }}';
+          const RESEND_API_KEY = '${{ secrets.RESEND_API_KEY }}';
+          const SHIR_EMAIL = 'shir6873@gmail.com';
+
+          async function main() {
+            // Fetch all couples
+            const res = await fetch(SUPABASE_URL + '/rest/v1/couples?select=*', {
+              headers: {
+                apikey: SUPABASE_KEY,
+                Authorization: 'Bearer ' + SUPABASE_KEY,
+              }
+            });
+            const couples = await res.json();
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const alerts = [];
+
+            for (const c of couples) {
+              if (!c.event_date || c.event_date === '2099-01-01') continue;
+              const wedding = new Date(c.event_date);
+              const name = c.couple_name || (c.partner1_name + ' ו' + c.partner2_name);
+              const daysToWedding = Math.ceil((wedding - today) / 86400000);
+
+              if (daysToWedding === 1) alerts.push('🎊 <strong>מחר החתונה של ' + name + '!</strong> בהצלחה!');
+              if (daysToWedding === 0) alerts.push('💍 <strong>היום החתונה של ' + name + '!</strong> מזל טוב!');
+
+              if (wedding < today) {
+                const thisYearAnniv = new Date(today.getFullYear(), wedding.getMonth(), wedding.getDate());
+                const daysToAnniv = Math.ceil((thisYearAnniv - today) / 86400000);
+                const years = thisYearAnniv.getFullYear() - wedding.getFullYear();
+                if (daysToAnniv === 7)  alerts.push('📸 <strong>עוד שבוע — שנה ' + years + ' לחתונת ' + name + '</strong><br>זמן לפוסט אינסטגרם! ✨');
+                if (daysToAnniv === 1)  alerts.push('📸 <strong>מחר שנה ' + years + ' לחתונת ' + name + '</strong><br>זמן לפוסט אינסטגרם! 🎉');
+                if (daysToAnniv === 0)  alerts.push('🎂 <strong>היום שנה ' + years + ' לחתונת ' + name + '!</strong> מזל טוב! 💜');
+              }
+            }
+
+            console.log('Alerts found:', alerts.length);
+            if (alerts.length === 0) { console.log('Nothing to send today.'); return; }
+
+            const alertsHtml = alerts.map(a =>
+              '<div style=\"background:#f8f4ff;border-right:4px solid #6c3fa0;border-radius:10px;padding:14px 18px;margin-bottom:12px;font-family:Georgia,serif;font-size:16px;line-height:1.6;direction:rtl;text-align:right;\">' + a + '</div>'
+            ).join('');
+
+            const html = '<div style=\"font-family:Georgia,serif;max-width:520px;margin:0 auto;direction:rtl;text-align:right;\"><div style=\"background:linear-gradient(135deg,#3a1f6e,#6c3fa0);padding:28px 32px;border-radius:16px 16px 0 0;\"><h1 style=\"color:white;margin:0;font-size:22px;\">✦ שיר · תזכורות היום</h1><p style=\"color:rgba(255,255,255,0.8);margin:8px 0 0;font-size:14px;\">' + today.toLocaleDateString('he-IL', {weekday:'long',day:'numeric',month:'long',year:'numeric'}) + '</p></div><div style=\"background:white;padding:24px 32px;border-radius:0 0 16px 16px;border:1px solid #e8e0f0;border-top:none;\">' + alertsHtml + '<p style=\"color:#aaa;font-size:12px;margin-top:20px;\">נשלח אוטומטית ממערכת ניהול החתונות של שיר</p></div></div>';
+
+            const emailRes = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                from: 'Wedding App <onboarding@resend.dev>',
+                to: SHIR_EMAIL,
+                subject: '✦ תזכורת: ' + alerts.length + ' עדכון' + (alerts.length > 1 ? 'ים' : '') + ' להיום',
+                html: html
+              })
+            });
+            const result = await emailRes.json();
+            console.log('Email sent:', JSON.stringify(result));
+          }
+
+          main().catch(e => { console.error(e); process.exit(1); });
+          "
