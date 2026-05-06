@@ -54,6 +54,11 @@ export const CoupleProfile: React.FC<CoupleProfileProps> = ({ couple, onStatusCh
   const [taskDue, setTaskDue] = useState('')
   const [taskPriority, setTaskPriority] = useState<Task['priority']>('normal')
   const [addingTask, setAddingTask] = useState(false)
+  const [editingDate, setEditingDate] = useState(false)
+  const [dateValue, setDateValue] = useState(
+    couple.event_date && couple.event_date !== '2099-01-01' ? couple.event_date : ''
+  )
+  const [savingDate, setSavingDate] = useState(false)
 
   useEffect(() => {
     fetchVendors()
@@ -190,6 +195,15 @@ export const CoupleProfile: React.FC<CoupleProfileProps> = ({ couple, onStatusCh
     setSavingNotes(false)
   }
 
+  const saveDate = async () => {
+    setSavingDate(true)
+    const newDate = dateValue || '2099-01-01'
+    await supabase.from('couples').update({ event_date: newDate }).eq('id', couple.id)
+    onUpdate({ ...couple, event_date: newDate })
+    setSavingDate(false)
+    setEditingDate(false)
+  }
+
   const coupleLink = `${window.location.origin}/couple/${couple.couple_link_token}`
 
   const phoneDigits = couple.phone?.replace(/\D/g, '') || ''
@@ -214,20 +228,41 @@ export const CoupleProfile: React.FC<CoupleProfileProps> = ({ couple, onStatusCh
           <h2>{couple.couple_name || `${couple.partner1_name} ו${couple.partner2_name}`}</h2>
           <div className="cp-header-meta">
             {couple.phone && <span className="cp-phone">📞 {couple.phone}</span>}
-            {couple.event_date && couple.event_date !== '2099-01-01' && (() => {
-              const d = new Date(couple.event_date)
-              const today = new Date(); today.setHours(0,0,0,0)
-              const days = Math.ceil((d.getTime() - today.getTime()) / (1000*60*60*24))
-              const dateStr = d.toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' })
-              return (
-                <span className="cp-event-date-badge">
-                  📅 {dateStr}
-                  <span className="cp-days-badge" style={{ background: days <= 30 ? '#e63946' : days <= 90 ? '#f8961e' : '#6c63ff' }}>
-                    {days <= 0 ? '🎉 היום!' : days === 1 ? 'מחר' : `עוד ${days} ימים`}
-                  </span>
-                </span>
-              )
-            })()}
+            {editingDate ? (
+              <div className="cp-date-edit">
+                <input
+                  className="cp-date-input"
+                  type="date"
+                  value={dateValue}
+                  onChange={e => setDateValue(e.target.value)}
+                  autoFocus
+                />
+                <button className="cp-date-save" onClick={saveDate} disabled={savingDate}>
+                  {savingDate ? '...' : '✓ שמור'}
+                </button>
+                <button className="cp-date-cancel" onClick={() => setEditingDate(false)}>ביטול</button>
+              </div>
+            ) : (
+              <span
+                className="cp-event-date-badge"
+                onClick={() => setEditingDate(true)}
+                title="לחץ לעריכת תאריך"
+              >
+                {couple.event_date && couple.event_date !== '2099-01-01' ? (() => {
+                  const d = new Date(couple.event_date)
+                  const today = new Date(); today.setHours(0,0,0,0)
+                  const days = Math.ceil((d.getTime() - today.getTime()) / (1000*60*60*24))
+                  const dateStr = d.toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' })
+                  return <>
+                    📅 {dateStr}
+                    <span className="cp-days-badge" style={{ background: days <= 30 ? '#e63946' : days <= 90 ? '#f8961e' : '#6c63ff' }}>
+                      {days <= 0 ? '🎉 היום!' : days === 1 ? 'מחר' : `עוד ${days} ימים`}
+                    </span>
+                    <span className="cp-date-edit-hint">✏️</span>
+                  </>
+                })() : <span className="cp-no-date-badge">📅 הוסף תאריך חתונה ✏️</span>}
+              </span>
+            )}
           </div>
         </div>
         <div className="cp-header-actions">
