@@ -37,8 +37,8 @@
     max-height: 340px;
     position: relative;
     flex-shrink: 0;
-    /* override the desktop absolute positioning */
     overflow: hidden;
+    order: -1;   /* force image above text panel */
   }
 
   /* slides fill the image panel */
