@@ -68,6 +68,10 @@
   border-top-color: #6c63ff;
 }
 
+.sf-kpi-card.sf-kpi-gray {
+  border-top-color: #aaa;
+}
+
 .sf-kpi-value {
   font-size: 26px;
   font-weight: 700;

@@ -159,12 +159,32 @@ export const ShirFinance: React.FC<ShirFinanceProps> = ({ couples }) => {
   const totalFee = shirVendors.reduce((s, v) => s + (v.contract_amount || 0), 0) + manualTotalFee
   const totalPaid = shirVendors.reduce((s, v) => s + calcVendorPaid(v), 0) + manualTotalPaid
   const totalBalance = totalFee - totalPaid
-  const activeCount = activeCouples.length
 
-  // Build couple rows
+  const feeForYear = (year: number) => {
+    let sum = 0
+    activeCouples.forEach(couple => {
+      if (!couple.event_date) return
+      const y = new Date(couple.event_date).getFullYear()
+      if (y !== year) return
+      const cv = shirVendors.filter(v => v.wedding_id === couple.id)
+      const vendorFee = cv.reduce((s, v) => s + (v.contract_amount || 0), 0)
+      sum += vendorFee > 0 ? vendorFee : (couple.budget || 0)
+    })
+    manualWeddings.forEach(w => {
+      if (!w.event_date) return
+      const y = new Date(w.event_date).getFullYear()
+      if (y === year) sum += w.fee
+    })
+    return sum
+  }
+  const revenue2026 = feeForYear(2026)
+  const revenue2025 = feeForYear(2025)
+
+  // Build couple rows — if no הפקה vendor, fall back to couple.budget
   const coupleRows: CoupleRow[] = activeCouples.map(couple => {
     const cv = shirVendors.filter(v => v.wedding_id === couple.id)
-    const fee = cv.reduce((s, v) => s + (v.contract_amount || 0), 0)
+    const vendorFee = cv.reduce((s, v) => s + (v.contract_amount || 0), 0)
+    const fee = vendorFee > 0 ? vendorFee : (couple.budget || 0)
     const paid = cv.reduce((s, v) => s + calcVendorPaid(v), 0)
     const balance = fee - paid
     const nextPaymentDate = cv.reduce<string | null>((best, v) => {
@@ -174,8 +194,7 @@ export const ShirFinance: React.FC<ShirFinanceProps> = ({ couples }) => {
       return best
     }, null)
     return { couple, fee, paid, balance, nextPaymentDate }
-  }).sort((a, b) => {
-    // Sort by next payment date ascending, nulls last
+  }).filter(r => r.fee > 0).sort((a, b) => {
     if (!a.nextPaymentDate && !b.nextPaymentDate) return 0
     if (!a.nextPaymentDate) return 1
     if (!b.nextPaymentDate) return -1
@@ -224,8 +243,12 @@ export const ShirFinance: React.FC<ShirFinanceProps> = ({ couples }) => {
           <span className="sf-kpi-label">יתרה לגבייה</span>
         </div>
         <div className="sf-kpi-card sf-kpi-purple">
-          <span className="sf-kpi-value">{activeCount}</span>
-          <span className="sf-kpi-label">סה"כ זוגות</span>
+          <span className="sf-kpi-value">₪{revenue2026.toLocaleString('he-IL')}</span>
+          <span className="sf-kpi-label">הכנסות 2026</span>
+        </div>
+        <div className="sf-kpi-card sf-kpi-gray">
+          <span className="sf-kpi-value">₪{revenue2025.toLocaleString('he-IL')}</span>
+          <span className="sf-kpi-label">הכנסות 2025</span>
         </div>
       </div>
 
