@@ -493,6 +493,14 @@
   }
 }
 
+/* VAT mode hint */
+.vw-vat-mode-hint {
+  font-size: 11px;
+  color: #8888aa;
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
 /* Cash VAT badge */
 .vw-vat-cash-badge {
   display: inline-block;

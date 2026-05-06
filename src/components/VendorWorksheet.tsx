@@ -43,6 +43,7 @@ interface EditingVendor {
   pricing_type: 'fixed' | 'per_head'
   price_per_head: string
   contract_amount: string
+  contract_includes_vat: boolean
   is_confirmed: boolean
   notes: string
   payments: Payment[]
@@ -64,6 +65,7 @@ const emptyVendor = (): EditingVendor => ({
   pricing_type: 'fixed',
   price_per_head: '',
   contract_amount: '',
+  contract_includes_vat: true,
   is_confirmed: false,
   notes: '',
   payments: [],
@@ -136,6 +138,7 @@ export const VendorWorksheet: React.FC<VendorWorksheetProps> = ({
       pricing_type: v.pricing_type as 'fixed' | 'per_head',
       price_per_head: v.price_per_head?.toString() || '',
       contract_amount: v.contract_amount?.toString() || '',
+      contract_includes_vat: (v as any).contract_includes_vat !== false,
       is_confirmed: v.is_confirmed || false,
       notes: v.notes || '',
       payments: pmts,
@@ -161,6 +164,7 @@ export const VendorWorksheet: React.FC<VendorWorksheetProps> = ({
         contract_amount: form.pricing_type === 'fixed'
           ? parseFloat(form.contract_amount) || 0
           : (parseFloat(form.price_per_head) || 0) * guests,
+        contract_includes_vat: form.contract_includes_vat,
         amount_paid: totalFromPayments,
         is_confirmed: form.is_confirmed,
         notes: form.notes,
@@ -323,6 +327,26 @@ export const VendorWorksheet: React.FC<VendorWorksheetProps> = ({
             </div>
           )}
 
+          {/* VAT type toggle */}
+          <div className="vw-form-group">
+            <label>מחיר החוזה</label>
+            <div className="vw-type-btns">
+              <button
+                className={`vw-type-btn ${form.contract_includes_vat ? 'active' : ''}`}
+                onClick={() => setForm(p => ({ ...p, contract_includes_vat: true }))}
+              >כולל מע"מ</button>
+              <button
+                className={`vw-type-btn ${!form.contract_includes_vat ? 'active' : ''}`}
+                onClick={() => setForm(p => ({ ...p, contract_includes_vat: false }))}
+              >לא כולל מע"מ</button>
+            </div>
+            <span className="vw-vat-mode-hint">
+              {form.contract_includes_vat
+                ? 'המחיר כולל מע"מ — תשלומים במזומן פטורים, שאר התשלומים יופחת מהם מע"מ'
+                : 'המחיר לא כולל מע"מ — מע"מ יתווסף על תשלומים שאינם מזומן'}
+            </span>
+          </div>
+
           {/* Advance */}
           <div className="vw-section-title">מקדמה</div>
           <div className="vw-form-row">
@@ -410,40 +434,72 @@ export const VendorWorksheet: React.FC<VendorWorksheetProps> = ({
             const cashTotal = form.payments
               .filter(p => p.method === 'מזומן')
               .reduce((s, p) => s + (parseFloat(p.amount) || 0), 0)
-            const vatBase = form.payments
-              .filter(p => p.method !== 'מזומן' && p.includes_vat)
+            const nonCashTotal = form.payments
+              .filter(p => p.method !== 'מזומן')
               .reduce((s, p) => s + (parseFloat(p.amount) || 0), 0)
-            const nonVatTransfer = form.payments
-              .filter(p => p.method !== 'מזומן' && !p.includes_vat)
-              .reduce((s, p) => s + (parseFloat(p.amount) || 0), 0)
-            const vatAmt = vatAmount(vatBase)
-            const customerTotal = cashTotal + vatBase + nonVatTransfer
-            return (
-              <div className="vw-vat-summary">
-                <div className="vw-vat-summary-row">
-                  <span>סה"כ תשלומים (נטו)</span>
-                  <strong>₪{customerTotal.toLocaleString()}</strong>
+
+            if (form.contract_includes_vat) {
+              // Price includes VAT: cash is exempt, non-cash has VAT extracted from it
+              const nonCashNet = Math.round(nonCashTotal / (1 + VAT_RATE))
+              const nonCashVat = nonCashTotal - nonCashNet
+              const totalPaid = cashTotal + nonCashTotal
+              return (
+                <div className="vw-vat-summary">
+                  <div className="vw-vat-summary-row">
+                    <span>סה"כ תשלומים (כולל מע"מ)</span>
+                    <strong>₪{totalPaid.toLocaleString()}</strong>
+                  </div>
+                  {cashTotal > 0 && (
+                    <div className="vw-vat-summary-row vw-vat-cash">
+                      <span>מזומן — פטור ממע"מ</span>
+                      <span>₪{cashTotal.toLocaleString()}</span>
+                    </div>
+                  )}
+                  {nonCashTotal > 0 && (
+                    <div className="vw-vat-summary-row vw-vat-detail">
+                      <span>העברה/צ'ק — נטו + מע"מ</span>
+                      <span>₪{nonCashNet.toLocaleString()} + ₪{nonCashVat.toLocaleString()} מע"מ</span>
+                    </div>
+                  )}
+                  {nonCashVat > 0 && (
+                    <div className="vw-vat-summary-row vw-vat-total">
+                      <span>סה"כ מע"מ לדיווח</span>
+                      <strong>₪{nonCashVat.toLocaleString()}</strong>
+                    </div>
+                  )}
                 </div>
-                {cashTotal > 0 && (
-                  <div className="vw-vat-summary-row vw-vat-cash">
-                    <span>מתוכם מזומן (ללא מע"מ)</span>
-                    <span>₪{cashTotal.toLocaleString()}</span>
+              )
+            } else {
+              // Price excludes VAT: VAT added on top of non-cash payments that include_vat
+              const vatBase = form.payments
+                .filter(p => p.method !== 'מזומן' && p.includes_vat)
+                .reduce((s, p) => s + (parseFloat(p.amount) || 0), 0)
+              const nonVatTransfer = form.payments
+                .filter(p => p.method !== 'מזומן' && !p.includes_vat)
+                .reduce((s, p) => s + (parseFloat(p.amount) || 0), 0)
+              const vatAmt = Math.round(vatBase * VAT_RATE)
+              const totalWithVat = cashTotal + vatBase + vatAmt + nonVatTransfer
+              return (
+                <div className="vw-vat-summary">
+                  <div className="vw-vat-summary-row">
+                    <span>סה"כ לתשלום (כולל מע"מ)</span>
+                    <strong>₪{totalWithVat.toLocaleString()}</strong>
                   </div>
-                )}
-                {vatBase > 0 && (
-                  <div className="vw-vat-summary-row vw-vat-detail">
-                    <span>בסיס מע"מ</span>
-                    <span>₪{netAmount(vatBase).toLocaleString()} + מע"מ ₪{vatAmt.toLocaleString()}</span>
-                  </div>
-                )}
-                {vatAmt > 0 && (
-                  <div className="vw-vat-summary-row vw-vat-total">
-                    <span>סה"כ כולל מע"מ לתשלום</span>
-                    <strong>₪{(cashTotal + vatBase + nonVatTransfer).toLocaleString()}</strong>
-                  </div>
-                )}
-              </div>
-            )
+                  {cashTotal > 0 && (
+                    <div className="vw-vat-summary-row vw-vat-cash">
+                      <span>מזומן — ללא מע"מ</span>
+                      <span>₪{cashTotal.toLocaleString()}</span>
+                    </div>
+                  )}
+                  {vatBase > 0 && (
+                    <div className="vw-vat-summary-row vw-vat-detail">
+                      <span>בסיס מע"מ + מע"מ 18%</span>
+                      <span>₪{vatBase.toLocaleString()} + ₪{vatAmt.toLocaleString()}</span>
+                    </div>
+                  )}
+                </div>
+              )
+            }
           })()}
 
           {/* Confirmed + notes */}
@@ -550,16 +606,21 @@ export const VendorWorksheet: React.FC<VendorWorksheetProps> = ({
                             )}
                             {pmts.map((p, i) => {
                               const gross = parseFloat(p.amount) || 0
+                              const includedVat = (v as any).contract_includes_vat !== false
+                              const isCash = p.method === 'מזומן'
+                              const netAmt = includedVat && !isCash ? Math.round(gross / (1 + VAT_RATE)) : netAmount(gross)
+                              const vatAmt = includedVat && !isCash ? gross - netAmt : vatAmount(gross)
                               return (
                                 <div key={i} className="vw-payment-detail-row">
                                   <span className="vw-pd-label">תשלום {i + 1}</span>
                                   <span>₪{gross.toLocaleString()}</span>
-                                  {p.includes_vat && (
+                                  {isCash ? (
+                                    <span className="vw-vat-cash-badge" style={{ fontSize: 11, padding: '1px 6px' }}>מזומן — פטור ממע"מ</span>
+                                  ) : includedVat ? (
+                                    <span className="vw-pd-vat">נטו ₪{netAmt.toLocaleString()} + מע"מ ₪{vatAmt.toLocaleString()}</span>
+                                  ) : p.includes_vat ? (
                                     <span className="vw-pd-vat">נטו ₪{netAmount(gross).toLocaleString()} + מע"מ ₪{vatAmount(gross).toLocaleString()}</span>
-                                  )}
-                                  {p.method === 'העברה' && !p.includes_vat && gross > 0 && (
-                                    <span className="vw-pd-no-vat">💡 ללא מע"מ — שווה ₪{Math.round(gross * (1 + VAT_RATE)).toLocaleString()} ברוטו</span>
-                                  )}
+                                  ) : null}
                                   <span className="vw-pd-method">{p.method}</span>
                                   {p.date && <span className="vw-pd-date">{p.date}</span>}
                                 </div>
