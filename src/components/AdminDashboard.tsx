@@ -97,6 +97,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [search, setSearch] = useState('')
   const [bannerIndex, setBannerIndex] = useState(0)
   const [bannerDismissed, setBannerDismissed] = useState(false)
+  const [showAddCouple, setShowAddCouple] = useState(false)
+  const [addForm, setAddForm] = useState({ partner1_name: '', partner2_name: '', phone: '', event_date: '', budget: '', status: 'עבר' as Status })
+  const [addSaving, setAddSaving] = useState(false)
 
   useEffect(() => { fetchCouples() }, [])
 
@@ -134,6 +137,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     } else {
       setSelected(null)
     }
+  }
+
+  const handleAddCouple = async () => {
+    if (!addForm.partner1_name.trim() || !addForm.partner2_name.trim()) return
+    setAddSaving(true)
+    const token = Math.random().toString(36).substring(2, 12)
+    const { data, error } = await supabase.from('couples').insert([{
+      partner1_name: addForm.partner1_name.trim(),
+      partner2_name: addForm.partner2_name.trim(),
+      couple_name: `${addForm.partner1_name.trim()} ו${addForm.partner2_name.trim()}`,
+      phone: addForm.phone.trim(),
+      event_date: addForm.event_date || '2099-01-01',
+      budget: parseFloat(addForm.budget) || 0,
+      status: addForm.status,
+      couple_link_token: token,
+    }]).select().single()
+    if (!error && data) {
+      setCouples(prev => [data, ...prev])
+      setActiveTab(addForm.status)
+      setSelected(data)
+    }
+    setAddSaving(false)
+    setShowAddCouple(false)
+    setAddForm({ partner1_name: '', partner2_name: '', phone: '', event_date: '', budget: '', status: 'עבר' })
   }
 
   const notifications = buildNotifications(couples)
@@ -225,6 +252,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               ))}
             </div>
 
+            <button className="admin-add-couple-btn" onClick={() => setShowAddCouple(true)}>
+              + הוסף זוג
+            </button>
+
             <input
               className="admin-search"
               placeholder="חיפוש זוג..."
@@ -287,6 +318,60 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
         <button className="admin-logout" onClick={onLogout}>התנתק</button>
       </aside>
+
+      {/* ── Add Couple Modal ── */}
+      {showAddCouple && (
+        <div className="admin-modal-overlay" onClick={() => setShowAddCouple(false)}>
+          <div className="admin-modal" onClick={e => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h2>הוסף זוג חדש</h2>
+              <button className="admin-modal-close" onClick={() => setShowAddCouple(false)}>✕</button>
+            </div>
+            <div className="admin-modal-body">
+              <div className="admin-modal-row">
+                <div className="admin-modal-group">
+                  <label>שם בן/בת זוג א׳ *</label>
+                  <input className="admin-modal-input" placeholder="למשל: נועה" value={addForm.partner1_name} onChange={e => setAddForm(p => ({ ...p, partner1_name: e.target.value }))} />
+                </div>
+                <div className="admin-modal-group">
+                  <label>שם בן/בת זוג ב׳ *</label>
+                  <input className="admin-modal-input" placeholder="למשל: דניאל" value={addForm.partner2_name} onChange={e => setAddForm(p => ({ ...p, partner2_name: e.target.value }))} />
+                </div>
+              </div>
+              <div className="admin-modal-row">
+                <div className="admin-modal-group">
+                  <label>טלפון</label>
+                  <input className="admin-modal-input" placeholder="050-0000000" value={addForm.phone} onChange={e => setAddForm(p => ({ ...p, phone: e.target.value }))} />
+                </div>
+                <div className="admin-modal-group">
+                  <label>תאריך החתונה</label>
+                  <input className="admin-modal-input" type="date" value={addForm.event_date} onChange={e => setAddForm(p => ({ ...p, event_date: e.target.value }))} />
+                </div>
+              </div>
+              <div className="admin-modal-row">
+                <div className="admin-modal-group">
+                  <label>תקציב (₪)</label>
+                  <input className="admin-modal-input" type="number" placeholder="0" value={addForm.budget} onChange={e => setAddForm(p => ({ ...p, budget: e.target.value }))} />
+                </div>
+                <div className="admin-modal-group">
+                  <label>סטטוס</label>
+                  <select className="admin-modal-input" value={addForm.status} onChange={e => setAddForm(p => ({ ...p, status: e.target.value as Status }))}>
+                    <option value="עבר">עבר</option>
+                    <option value="פעילים">פעילים</option>
+                    <option value="מתלבטים">מתלבטים</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="admin-modal-footer">
+              <button className="admin-modal-save" onClick={handleAddCouple} disabled={addSaving || !addForm.partner1_name.trim() || !addForm.partner2_name.trim()}>
+                {addSaving ? 'שומר...' : '+ הוסף זוג'}
+              </button>
+              <button className="admin-modal-cancel" onClick={() => setShowAddCouple(false)}>ביטול</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className="admin-main">
         {mainSection === 'couples' ? (

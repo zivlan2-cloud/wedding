@@ -5,6 +5,157 @@
   position: relative;
 }
 
+/* ── Add couple button ── */
+.admin-add-couple-btn {
+  width: 100%;
+  padding: 10px;
+  background: rgba(108, 99, 255, 0.15);
+  border: 1.5px dashed rgba(108, 99, 255, 0.5);
+  border-radius: 12px;
+  color: rgba(200, 195, 255, 0.9);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  margin-bottom: 8px;
+}
+.admin-add-couple-btn:hover {
+  background: rgba(108, 99, 255, 0.28);
+  border-color: rgba(108, 99, 255, 0.8);
+  color: white;
+}
+
+/* ── Add couple modal ── */
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 8, 30, 0.65);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.admin-modal {
+  background: white;
+  border-radius: 22px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+  direction: rtl;
+  overflow: hidden;
+}
+
+.admin-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #f0eafa;
+}
+
+.admin-modal-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+  font-family: 'Georgia', serif;
+  margin: 0;
+}
+
+.admin-modal-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #bbb;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+  transition: all 0.15s;
+}
+.admin-modal-close:hover { background: #f5f5f5; color: #555; }
+
+.admin-modal-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-modal-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.admin-modal-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.admin-modal-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9080c0;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.admin-modal-input {
+  padding: 10px 14px;
+  border: 1.5px solid #e0d8f8;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #faf8ff;
+  color: #1a1a2e;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+.admin-modal-input:focus { outline: none; border-color: #6c3fa0; background: white; }
+
+.admin-modal-footer {
+  padding: 16px 24px 20px;
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid #f0eafa;
+}
+
+.admin-modal-save {
+  flex: 1;
+  padding: 12px;
+  background: #6c3fa0;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.admin-modal-save:hover:not(:disabled) { background: #8c5fc0; }
+.admin-modal-save:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.admin-modal-cancel {
+  padding: 12px 20px;
+  background: transparent;
+  color: #999;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.admin-modal-cancel:hover { color: #555; }
+
+@media (max-width: 640px) {
+  .admin-modal-row { grid-template-columns: 1fr; }
+}
+
 /* ── Slide-down notification banner ── */
 .admin-banner {
   position: fixed;
