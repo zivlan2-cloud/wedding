@@ -152,6 +152,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       budget: parseFloat(addForm.budget) || 0,
       status: addForm.status,
       couple_link_token: token,
+      guest_count: 0,
+      estimated_guests: 0,
     }]).select().single()
     if (error) {
       alert('שגיאה: ' + error.message)
