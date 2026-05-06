@@ -4,7 +4,10 @@ import { supabase } from '../lib/supabase'
 import { Couple, Vendor } from '../types'
 import { VendorWorksheet } from './VendorWorksheet'
 import { CoupleSignature } from './CoupleSignature'
+import { SeatingManager } from './SeatingManager'
 import '../styles/CoupleWorkPage.css'
+
+type CoupleTab = 'vendors' | 'seating' | 'documents'
 
 interface DocRecord {
   id: string
@@ -21,6 +24,7 @@ export const CoupleWorkPage: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [uploadingDoc, setUploadingDoc] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<CoupleTab>('vendors')
   const [editingDetails, setEditingDetails] = useState(false)
   const [editForm, setEditForm] = useState({ budget: '', estimated_guests: '', venue_name: '', venue_cost: '', event_date: '' })
   const [savingDetails, setSavingDetails] = useState(false)
@@ -250,71 +254,92 @@ export const CoupleWorkPage: React.FC = () => {
           )}
         </div>
 
-        {/* Vendors */}
-        <div className="cwp-card">
-          <h2>ספקים ומחירים</h2>
-          <VendorWorksheet
-            weddingId={couple.id}
-            estimatedGuests={guests}
-            vendors={vendors}
-            onVendorsChange={setVendors}
-            readOnly={false}
-          />
+        {/* Tab navigation */}
+        <div className="cwp-tabs">
+          <button className={`cwp-tab-btn ${activeTab === 'vendors' ? 'active' : ''}`} onClick={() => setActiveTab('vendors')}>💼 ספקים</button>
+          <button className={`cwp-tab-btn ${activeTab === 'seating' ? 'active' : ''}`} onClick={() => setActiveTab('seating')}>🪑 סידורי הושבה</button>
+          <button className={`cwp-tab-btn ${activeTab === 'documents' ? 'active' : ''}`} onClick={() => setActiveTab('documents')}>📁 מסמכים</button>
         </div>
 
-        {/* Pending contract signature */}
-        {pendingContracts.length > 0 && (
+        {/* Vendors tab */}
+        {activeTab === 'vendors' && (
           <div className="cwp-card">
-            {pendingContracts.map(doc => (
-              <CoupleSignature
-                key={doc.id}
-                weddingId={couple.id}
-                partnerName={`${couple.partner1_name} ו${couple.partner2_name}`}
-                contractDoc={doc}
-                onSigned={fetchData}
-              />
-            ))}
+            <h2>ספקים ומחירים</h2>
+            <VendorWorksheet
+              weddingId={couple.id}
+              estimatedGuests={guests}
+              vendors={vendors}
+              onVendorsChange={setVendors}
+              readOnly={false}
+            />
           </div>
         )}
 
-        {/* Documents — two zones */}
-        <div className="cwp-card">
-          <h2>מסמכים 📁</h2>
-
-          <div className="cwp-doc-zone">
-            <h3>הצעות מחיר</h3>
-            <p className="cwp-doc-zone-note">אל תחסכו — רכזו כאן את כל הצעות המחיר שקיבלתם מהספקים.</p>
-            <label className="cwp-upload-btn">
-              {uploadingDoc === 'quotes' ? 'מעלה...' : '+ העלה הצעת מחיר'}
-              <input type="file" hidden onChange={e => handleDocUpload(e, 'quotes')} accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
-            </label>
-            {quotes.length === 0 && <p className="cwp-no-docs">אין הצעות מחיר עדיין</p>}
-            <div className="cwp-docs-list">
-              {quotes.map(doc => (
-                <a key={doc.id} href={doc.file_url} target="_blank" rel="noreferrer" className="cwp-doc-item">
-                  📄 {doc.file_name}
-                </a>
-              ))}
-            </div>
+        {/* Seating tab */}
+        {activeTab === 'seating' && (
+          <div className="cwp-card">
+            <h2>סידורי הושבה 🪑</h2>
+            <SeatingManager weddingId={couple.id} readOnly={false} />
           </div>
+        )}
 
-          <div className="cwp-doc-zone">
-            <h3>חוזים חתומים</h3>
-            <p className="cwp-doc-zone-note">העלו כאן חוזים שכבר חתמתם — שיר תראה אותם גם היא.</p>
-            <label className="cwp-upload-btn">
-              {uploadingDoc === 'contracts' ? 'מעלה...' : '+ העלה חוזה'}
-              <input type="file" hidden onChange={e => handleDocUpload(e, 'contracts')} accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
-            </label>
-            {contracts.length === 0 && <p className="cwp-no-docs">אין חוזים עדיין</p>}
-            <div className="cwp-docs-list">
-              {contracts.map(doc => (
-                <a key={doc.id} href={doc.file_url} target="_blank" rel="noreferrer" className="cwp-doc-item">
-                  📄 {doc.file_name}
-                </a>
-              ))}
+        {/* Documents tab */}
+        {activeTab === 'documents' && (
+          <>
+            {/* Pending contract signature */}
+            {pendingContracts.length > 0 && (
+              <div className="cwp-card">
+                {pendingContracts.map(doc => (
+                  <CoupleSignature
+                    key={doc.id}
+                    weddingId={couple.id}
+                    partnerName={`${couple.partner1_name} ו${couple.partner2_name}`}
+                    contractDoc={doc}
+                    onSigned={fetchData}
+                  />
+                ))}
+              </div>
+            )}
+
+            <div className="cwp-card">
+              <h2>מסמכים 📁</h2>
+
+              <div className="cwp-doc-zone">
+                <h3>הצעות מחיר</h3>
+                <p className="cwp-doc-zone-note">אל תחסכו — רכזו כאן את כל הצעות המחיר שקיבלתם מהספקים.</p>
+                <label className="cwp-upload-btn">
+                  {uploadingDoc === 'quotes' ? 'מעלה...' : '+ העלה הצעת מחיר'}
+                  <input type="file" hidden onChange={e => handleDocUpload(e, 'quotes')} accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+                </label>
+                {quotes.length === 0 && <p className="cwp-no-docs">אין הצעות מחיר עדיין</p>}
+                <div className="cwp-docs-list">
+                  {quotes.map(doc => (
+                    <a key={doc.id} href={doc.file_url} target="_blank" rel="noreferrer" className="cwp-doc-item">
+                      📄 {doc.file_name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <div className="cwp-doc-zone">
+                <h3>חוזים חתומים</h3>
+                <p className="cwp-doc-zone-note">העלו כאן חוזים שכבר חתמתם — שיר תראה אותם גם היא.</p>
+                <label className="cwp-upload-btn">
+                  {uploadingDoc === 'contracts' ? 'מעלה...' : '+ העלה חוזה'}
+                  <input type="file" hidden onChange={e => handleDocUpload(e, 'contracts')} accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+                </label>
+                {contracts.length === 0 && <p className="cwp-no-docs">אין חוזים עדיין</p>}
+                <div className="cwp-docs-list">
+                  {contracts.map(doc => (
+                    <a key={doc.id} href={doc.file_url} target="_blank" rel="noreferrer" className="cwp-doc-item">
+                      📄 {doc.file_name}
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
 
         <div className="cwp-footer">
           <p>שאלות? תמיד אפשר לכתוב לשיר ישירות 💜</p>

@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import { Couple, Vendor } from '../types'
 import { VendorWorksheet } from './VendorWorksheet'
 import { ContractGenerator } from './ContractGenerator'
+import { SeatingManager } from './SeatingManager'
 import '../styles/CoupleProfile.css'
 
 interface Task {
@@ -416,6 +417,11 @@ export const CoupleProfile: React.FC<CoupleProfileProps> = ({ couple, onStatusCh
           onVendorsChange={setVendors}
           readOnly={false}
         />
+      </div>
+
+      <div className="cp-card">
+        <h3>סידורי הושבה 🪑</h3>
+        <SeatingManager weddingId={couple.id} readOnly={false} />
       </div>
 
       {/* Sketch / inspiration image */}

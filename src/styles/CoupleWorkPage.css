@@ -167,6 +167,29 @@
 .cwp-sum-item span.over  { color: #b84040; }
 .cwp-sum-item span.under { color: #5a8c52; }
 
+/* ── Section tabs ── */
+.cwp-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.cwp-tab-btn {
+  padding: 10px 20px;
+  background: white;
+  border: 1.5px solid rgba(232,213,192,0.5);
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-mid);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.cwp-tab-btn:hover { border-color: var(--brown); color: var(--brown); }
+.cwp-tab-btn.active { background: var(--brown); color: white; border-color: var(--brown); }
+
 /* ── Cards ── */
 .cwp-card {
   background: white;
