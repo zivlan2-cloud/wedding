@@ -290,7 +290,7 @@ export const CoupleProfile: React.FC<CoupleProfileProps> = ({ couple, onStatusCh
 
       {/* Tasks per couple */}
       <div className="cp-card">
-        <h3>משימות לזוג ✅</h3>
+        <h3>משימות לחתונה ✅</h3>
         <form className="cp-task-form" onSubmit={addTask}>
           <input
             className="cp-task-input"
