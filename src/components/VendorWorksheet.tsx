@@ -175,16 +175,31 @@ export const VendorWorksheet: React.FC<VendorWorksheetProps> = ({
       }
 
       if (editingId) {
-        const { data } = await supabase.from('vendors').update(payload).eq('id', editingId).select()
+        const { data, error } = await supabase.from('vendors').update(payload).eq('id', editingId).select()
+        if (error) throw error
         if (data) onVendorsChange(vendors.map(v => v.id === editingId ? data[0] : v))
       } else {
-        const { data } = await supabase.from('vendors').insert([payload]).select()
-        if (data) onVendorsChange([...vendors, data[0]])
+        const { data, error } = await supabase.from('vendors').insert([payload]).select()
+        if (error) {
+          // If contract_includes_vat column doesn't exist yet, retry without it
+          if (error.message?.includes('contract_includes_vat')) {
+            const { contract_includes_vat: _, ...payloadWithout } = payload
+            const { data: data2, error: error2 } = await supabase.from('vendors').insert([payloadWithout]).select()
+            if (error2) throw error2
+            if (data2) onVendorsChange([...vendors, data2[0]])
+          } else {
+            throw error
+          }
+        } else if (data) {
+          onVendorsChange([...vendors, data[0]])
+        }
       }
 
       setForm(emptyVendor())
       setEditingId(null)
       setShowForm(false)
+    } catch (err) {
+      alert('שגיאה בשמירה: ' + (err instanceof Error ? err.message : String(err)))
     } finally {
       setLoading(false)
     }
