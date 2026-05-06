@@ -218,11 +218,15 @@ export const ContractGenerator: React.FC<ContractGeneratorProps> = ({ couple, on
 
   <div class="final-sig">
     <div class="final-sig-box">
+      <div style="position:relative; height:50px; margin-bottom:4px;">
+        <img src="${sigUrl}" alt="חתימת שיר" style="position:absolute; bottom:0; left:50%; transform:translateX(-50%); height:46px; width:auto;" onerror="this.style.display='none'"/>
+      </div>
       <div class="final-sig-line"></div>
       <div class="final-sig-name">שיר מילוא לנגלייב</div>
       <div class="final-sig-role">מנהלת האירוע</div>
     </div>
     <div class="final-sig-box">
+      <div style="height:54px;"></div>
       <div class="final-sig-line"></div>
       <div class="final-sig-name">${f.partner1_name} ו- ${f.partner2_name}</div>
       <div class="final-sig-role">המזמינים</div>
