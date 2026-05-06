@@ -22,7 +22,7 @@ export const CoupleWorkPage: React.FC = () => {
   const [notFound, setNotFound] = useState(false)
   const [uploadingDoc, setUploadingDoc] = useState<string | null>(null)
   const [editingDetails, setEditingDetails] = useState(false)
-  const [editForm, setEditForm] = useState({ budget: '', estimated_guests: '', venue_name: '', venue_cost: '' })
+  const [editForm, setEditForm] = useState({ budget: '', estimated_guests: '', venue_name: '', venue_cost: '', event_date: '' })
   const [savingDetails, setSavingDetails] = useState(false)
 
   useEffect(() => { fetchData() }, [token])
@@ -39,6 +39,7 @@ export const CoupleWorkPage: React.FC = () => {
       estimated_guests: coupleData.estimated_guests?.toString() || coupleData.guest_count?.toString() || '',
       venue_name: coupleData.venue_name || '',
       venue_cost: coupleData.venue_cost?.toString() || '',
+      event_date: (coupleData.event_date && coupleData.event_date !== '2099-01-01') ? coupleData.event_date : '',
     })
 
     const { data: vendorData } = await supabase.from('vendors').select('*').eq('wedding_id', coupleData.id).order('sort_order').order('created_at')
@@ -59,6 +60,7 @@ export const CoupleWorkPage: React.FC = () => {
       venue_name: editForm.venue_name || null,
       venue_cost: editForm.venue_cost ? parseFloat(editForm.venue_cost) : null,
       has_venue: !!editForm.venue_name,
+      event_date: editForm.event_date || '2099-01-01',
     }
     await supabase.from('couples').update(updates).eq('id', couple.id)
     setCouple(prev => prev ? { ...prev, ...updates } : prev)
@@ -207,6 +209,12 @@ export const CoupleWorkPage: React.FC = () => {
               </div>
               <div className="cwp-edit-row">
                 <div className="cwp-edit-group">
+                  <label>תאריך החתונה 📅</label>
+                  <input className="cwp-input cwp-input-date" type="date" value={editForm.event_date} onChange={e => setEditForm(p => ({ ...p, event_date: e.target.value }))} />
+                </div>
+              </div>
+              <div className="cwp-edit-row">
+                <div className="cwp-edit-group">
                   <label>מקום האירוע</label>
                   <input className="cwp-input" placeholder="שם המקום" value={editForm.venue_name} onChange={e => setEditForm(p => ({ ...p, venue_name: e.target.value }))} />
                 </div>
@@ -221,6 +229,20 @@ export const CoupleWorkPage: React.FC = () => {
             </div>
           ) : (
             <div className="cwp-details-view">
+              {couple.event_date && couple.event_date !== '2099-01-01' ? (
+                <div className="cwp-date-highlight">
+                  <span className="cwp-date-label">📅 תאריך החתונה</span>
+                  <span className="cwp-date-value">{new Date(couple.event_date).toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                  {(() => {
+                    const days = Math.ceil((new Date(couple.event_date).getTime() - new Date().setHours(0,0,0,0)) / (1000*60*60*24))
+                    return <span className="cwp-date-countdown" style={{ background: days <= 30 ? '#e63946' : days <= 90 ? '#f8961e' : '#6c63ff' }}>
+                      {days <= 0 ? '🎉 היום!' : days === 1 ? 'מחר!' : `עוד ${days} ימים`}
+                    </span>
+                  })()}
+                </div>
+              ) : (
+                <p className="cwp-no-date">📅 תאריך טרם נקבע — לחצו על עריכה כדי להוסיף</p>
+              )}
               {couple.venue_name && <p>📍 <strong>מקום:</strong> {couple.venue_name} {couple.venue_cost ? `— ₪${Number(couple.venue_cost).toLocaleString()}` : ''}</p>}
               <p>👥 <strong>כמות אורחים מוערך:</strong> {guests}</p>
               <p>💰 <strong>תקציב:</strong> ₪{(couple.budget || 0).toLocaleString()}</p>

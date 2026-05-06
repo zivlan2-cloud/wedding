@@ -281,6 +281,48 @@
 }
 .cwp-details-view strong { color: var(--text-dark); }
 
+.cwp-date-highlight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #fdf6ee;
+  border: 2px solid #c9a07a;
+  border-radius: 14px;
+  padding: 12px 18px;
+}
+
+.cwp-date-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brown);
+}
+
+.cwp-date-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+  font-family: 'Georgia', serif;
+}
+
+.cwp-date-countdown {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  border-radius: 20px;
+  padding: 3px 12px;
+}
+
+.cwp-no-date {
+  font-size: 13px;
+  color: #bbb;
+  font-style: italic;
+}
+
+.cwp-input-date {
+  font-size: 15px;
+}
+
 /* ── Documents ── */
 .cwp-doc-zone {
   margin-bottom: 20px;
