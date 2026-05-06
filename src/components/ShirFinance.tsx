@@ -99,7 +99,7 @@ export const ShirFinance: React.FC<ShirFinanceProps> = ({ couples }) => {
   const [showManualForm, setShowManualForm] = useState(false)
   const [manualForm, setManualForm] = useState({ name: '', fee: '', paid: '', event_date: '' })
 
-  const activeCouples = couples.filter(c => c.status === 'פעילים')
+  const activeCouples = couples.filter(c => c.status === 'פעילים' || c.status === 'עבר')
 
   useEffect(() => {
     try {
@@ -206,7 +206,7 @@ export const ShirFinance: React.FC<ShirFinanceProps> = ({ couples }) => {
     <div className="sf-page" dir="rtl">
       <div className="sf-title-row">
         <h2 className="sf-title">פיננסים — שכ"ט שיר</h2>
-        <span className="sf-subtitle">נתוני הכנסות ותשלומים לפי זוגות פעילים</span>
+        <span className="sf-subtitle">נתוני הכנסות ותשלומים לפי כל הזוגות</span>
       </div>
 
       {/* KPI Row */}
@@ -225,7 +225,7 @@ export const ShirFinance: React.FC<ShirFinanceProps> = ({ couples }) => {
         </div>
         <div className="sf-kpi-card sf-kpi-purple">
           <span className="sf-kpi-value">{activeCount}</span>
-          <span className="sf-kpi-label">זוגות פעילים</span>
+          <span className="sf-kpi-label">סה"כ זוגות</span>
         </div>
       </div>
 
@@ -233,7 +233,7 @@ export const ShirFinance: React.FC<ShirFinanceProps> = ({ couples }) => {
       <div className="sf-section">
         <h3 className="sf-section-title">לוח תשלומים לפי זוג</h3>
         {coupleRows.length === 0 ? (
-          <p className="sf-empty">אין זוגות פעילים עם שכ"ט מוגדר</p>
+          <p className="sf-empty">אין זוגות עם שכ"ט מוגדר</p>
         ) : (
           <div className="sf-table-wrap">
             <table className="sf-table">
