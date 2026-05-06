@@ -154,6 +154,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       couple_link_token: token,
       guest_count: 0,
       estimated_guests: 0,
+      wedding_style: '',
     }]).select().single()
     if (error) {
       alert('שגיאה: ' + error.message)
