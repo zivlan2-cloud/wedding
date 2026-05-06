@@ -569,6 +569,125 @@
   padding: 24px;
 }
 
+/* Error bar */
+.sm-error {
+  background: #fff0f0;
+  border: 1.5px solid #e63946;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #c0392b;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sm-error button { background: none; border: none; cursor: pointer; color: #c0392b; font-size: 15px; }
+
+/* Category header in grouped view */
+.sm-cat-header {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6c3fa0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 4px 4px;
+  border-bottom: 1px solid #ede8f8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sm-cat-count {
+  font-size: 11px;
+  background: #ede8f8;
+  border-radius: 10px;
+  padding: 1px 8px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Category badge */
+.sm-cat-badge {
+  font-size: 11px;
+  background: #f0eafa;
+  color: #6c3fa0;
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-weight: 600;
+}
+
+/* Category select */
+.sm-cat-select {
+  padding: 6px 10px;
+  border: 1.5px solid #d8d0f0;
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: inherit;
+  background: white;
+  cursor: pointer;
+  max-width: 160px;
+  color: #6c3fa0;
+}
+
+/* Full-width select */
+.sm-select-full {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid #d8d0f0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  background: white;
+  cursor: pointer;
+  color: #1a1a2e;
+}
+
+/* Custom category row */
+.sm-custom-cat-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.sm-input-cat { max-width: 220px; }
+.sm-btn-xs { padding: 6px 14px; font-size: 12px; }
+
+/* Table groups setup */
+.sm-groups-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sm-group-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sm-group-label {
+  font-size: 13px;
+  color: #7060a0;
+  white-space: nowrap;
+}
+
+.sm-group-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+/* Seating info with category */
+.sm-seating-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  flex-wrap: wrap;
+  min-width: 120px;
+}
+
 /* Mobile */
 @media (max-width: 640px) {
   .sm-stats {
