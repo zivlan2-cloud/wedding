@@ -130,3 +130,9 @@
 .wt-item-next .wt-days {
   color: #6c63ff;
 }
+
+.wt-empty {
+  font-size: 13px;
+  color: #bbb;
+  padding: 8px 0;
+}

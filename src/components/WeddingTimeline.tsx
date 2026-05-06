@@ -18,7 +18,12 @@ export const WeddingTimeline: React.FC<WeddingTimelineProps> = ({ couples }) => 
     .filter(c => c.dateObj >= today)
     .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime())
 
-  if (upcoming.length === 0) return null
+  if (upcoming.length === 0) return (
+    <div className="wt-wrap">
+      <div className="wt-label">חתונות קרובות</div>
+      <div className="wt-empty">אין חתונות עתידיות עם תאריך מוגדר</div>
+    </div>
+  )
 
   const getDaysUntil = (d: Date) => {
     const diff = d.getTime() - today.getTime()
