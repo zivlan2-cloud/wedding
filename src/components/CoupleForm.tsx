@@ -19,6 +19,7 @@ const LANDING_WA_TEXT = encodeURIComponent(
 
 const STEPS = [
   { id: 'names', title: 'אז תגידו רגע, איך קוראים לכם? 💑' },
+  { id: 'date', title: 'מתי החתונה? 📅' },
   { id: 'ages', title: 'בני כמה קיצים אתם?' },
   { id: 'phone', title: 'מספר טלפון ליצירת קשר 📱' },
   { id: 'venue', title: 'יש לכם כבר מקום לאירוע?' },
@@ -45,6 +46,7 @@ export const CoupleForm: React.FC = () => {
     partner1_id: '', partner2_id: '',
     partner1_age: '', partner2_age: '',
     phone: '',
+    event_date: '', date_known: '',
     has_venue: '', venue_name: '', venue_cost: '',
     estimated_guests: '', wedding_vision: '',
     important_vendors: '', producer_role: '', budget: '',
@@ -63,6 +65,7 @@ export const CoupleForm: React.FC = () => {
   const canProceed = () => {
     switch (STEPS[step].id) {
       case 'names': return data.partner1_name.trim() && data.partner2_name.trim()
+      case 'date': return data.date_known !== ''
       case 'ages': return data.partner1_age && data.partner2_age
       case 'phone': return data.phone.trim()
       case 'venue': return data.has_venue !== ''
@@ -101,7 +104,7 @@ export const CoupleForm: React.FC = () => {
         producer_role_vision: data.producer_role,
         budget: parseFloat(data.budget) || 0,
         wedding_style: 'לא צוין',
-        event_date: '2099-01-01',
+        event_date: data.event_date || '2099-01-01',
         status: 'מתלבטים',
       }])
       if (err) throw err
@@ -291,6 +294,26 @@ export const CoupleForm: React.FC = () => {
                   <input className="cf-input" placeholder="שם משפחה" value={data.partner2_last_name} onChange={e => set('partner2_last_name', e.target.value)} style={{ marginTop: 8 }} />
                 </div>
               </div>
+            </div>
+          )}
+
+          {STEPS[step].id === 'date' && (
+            <div className="cf-fields">
+              <div className="cf-radio-group">
+                <button className={`cf-radio ${data.date_known === 'yes' ? 'active' : ''}`} onClick={() => set('date_known', 'yes')}>כן, יש לנו תאריך</button>
+                <button className={`cf-radio ${data.date_known === 'no' ? 'active' : ''}`} onClick={() => set('date_known', 'no')}>עדיין לא</button>
+              </div>
+              {data.date_known === 'yes' && (
+                <input
+                  className="cf-input"
+                  type="date"
+                  value={data.event_date}
+                  onChange={e => set('event_date', e.target.value)}
+                />
+              )}
+              {data.date_known === 'no' && (
+                <p className="cf-hint">בסדר גמור — נוכל להוסיף תאריך מאוחר יותר 😊</p>
+              )}
             </div>
           )}
 

@@ -212,7 +212,23 @@ export const CoupleProfile: React.FC<CoupleProfileProps> = ({ couple, onStatusCh
       <div className="cp-header">
         <div>
           <h2>{couple.couple_name || `${couple.partner1_name} ו${couple.partner2_name}`}</h2>
-          {couple.phone && <span className="cp-phone">📞 {couple.phone}</span>}
+          <div className="cp-header-meta">
+            {couple.phone && <span className="cp-phone">📞 {couple.phone}</span>}
+            {couple.event_date && couple.event_date !== '2099-01-01' && (() => {
+              const d = new Date(couple.event_date)
+              const today = new Date(); today.setHours(0,0,0,0)
+              const days = Math.ceil((d.getTime() - today.getTime()) / (1000*60*60*24))
+              const dateStr = d.toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' })
+              return (
+                <span className="cp-event-date-badge">
+                  📅 {dateStr}
+                  <span className="cp-days-badge" style={{ background: days <= 30 ? '#e63946' : days <= 90 ? '#f8961e' : '#6c63ff' }}>
+                    {days <= 0 ? '🎉 היום!' : days === 1 ? 'מחר' : `עוד ${days} ימים`}
+                  </span>
+                </span>
+              )
+            })()}
+          </div>
         </div>
         <div className="cp-header-actions">
           <select

@@ -256,10 +256,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     <div className="admin-couple-card-name">
                       {couple.couple_name || `${couple.partner1_name} ו${couple.partner2_name}`}
                     </div>
-                    {couple.event_date && couple.event_date !== '2099-01-01' && (
-                      <div className="admin-couple-card-date">
-                        📅 {new Date(couple.event_date).toLocaleDateString('he-IL')}
-                      </div>
+                    {couple.event_date && couple.event_date !== '2099-01-01' ? (() => {
+                      const d = new Date(couple.event_date)
+                      const today = new Date(); today.setHours(0,0,0,0)
+                      const days = Math.ceil((d.getTime() - today.getTime()) / (1000*60*60*24))
+                      return (
+                        <div className="admin-couple-card-date-wrap">
+                          <span className="admin-couple-card-date">📅 {d.toLocaleDateString('he-IL')}</span>
+                          <span className="admin-couple-card-days" style={{ background: days <= 30 ? '#e63946' : days <= 90 ? '#f8961e' : '#6c63ff' }}>
+                            {days <= 0 ? 'היום!' : `${days}י׳`}
+                          </span>
+                        </div>
+                      )
+                    })() : (
+                      <div className="admin-couple-card-no-date">📅 תאריך לא נקבע</div>
                     )}
                     {couple.phone && (
                       <div className="admin-couple-card-phone">📞 {couple.phone}</div>
