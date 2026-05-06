@@ -258,7 +258,7 @@ export const CoupleWorkPage: React.FC = () => {
         <div className="cwp-tabs">
           <button className={`cwp-tab-btn ${activeTab === 'vendors' ? 'active' : ''}`} onClick={() => setActiveTab('vendors')}>💼 ספקים</button>
           <button className={`cwp-tab-btn ${activeTab === 'seating' ? 'active' : ''}`} onClick={() => setActiveTab('seating')}>🪑 סידורי הושבה</button>
-          <button className={`cwp-tab-btn ${activeTab === 'documents' ? 'active' : ''}`} onClick={() => setActiveTab('documents')}>📁 מסמכים</button>
+          <button className={`cwp-tab-btn ${activeTab === 'documents' ? 'active' : ''}`} onClick={() => setActiveTab('documents')}>📄 חוזים</button>
         </div>
 
         {/* Vendors tab */}

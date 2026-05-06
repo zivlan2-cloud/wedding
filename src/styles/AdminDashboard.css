@@ -156,84 +156,125 @@
   .admin-modal-row { grid-template-columns: 1fr; }
 }
 
-/* ── Slide-down notification banner ── */
-.admin-banner {
+/* ── Full-screen celebration banner ── */
+.admin-banner-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  background: linear-gradient(135deg, #3a1f6e, #6c3fa0);
+  inset: 0;
+  z-index: 1100;
+  background: rgba(20, 5, 45, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: overlayFadeIn 0.4s ease;
+  overflow: hidden;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Confetti pieces */
+.admin-banner-confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.admin-confetti-piece {
+  position: absolute;
+  top: -20px;
+  animation: confettiFall linear infinite;
+  border-radius: 2px;
+  opacity: 0.9;
+}
+
+@keyframes confettiFall {
+  0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0.2; }
+}
+
+/* Modal card */
+.admin-banner-modal {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(145deg, #3a1f6e, #6c3fa0, #9b5fcf);
   color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 20px;
-  box-shadow: 0 4px 24px rgba(60,20,100,0.35);
-  animation: bannerSlideDown 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: 24px;
+  padding: 48px 56px;
+  max-width: 520px;
+  width: 90%;
+  text-align: center;
   direction: rtl;
+  box-shadow: 0 24px 80px rgba(60,20,120,0.6);
+  animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@keyframes bannerSlideDown {
-  from { transform: translateY(-100%); opacity: 0; }
-  to   { transform: translateY(0);     opacity: 1; }
+@keyframes modalPop {
+  from { transform: scale(0.7); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
 }
 
-.admin-banner-content {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex: 1;
-  min-width: 0;
+.admin-banner-emoji {
+  font-size: 64px;
+  margin-bottom: 16px;
+  animation: emojiPulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes emojiPulse {
+  from { transform: scale(1); }
+  to   { transform: scale(1.15); }
 }
 
 .admin-banner-text {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   font-family: 'Georgia', serif;
-  line-height: 1.4;
+  line-height: 1.5;
+  margin-bottom: 20px;
 }
 
 .admin-banner-nav {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .admin-banner-nav button {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.2);
   border: none;
   color: white;
   border-radius: 50%;
-  width: 26px;
-  height: 26px;
+  width: 34px;
+  height: 34px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1;
   transition: background 0.15s;
 }
-.admin-banner-nav button:hover { background: rgba(255,255,255,0.3); }
+.admin-banner-nav button:hover { background: rgba(255,255,255,0.35); }
 
 .admin-banner-nav span {
-  font-size: 12px;
-  opacity: 0.75;
-  min-width: 28px;
+  font-size: 14px;
+  opacity: 0.8;
+  min-width: 36px;
   text-align: center;
 }
 
 .admin-banner-close {
-  background: rgba(255,255,255,0.15);
-  border: none;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
   color: white;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
+  border-radius: 50px;
+  padding: 10px 28px;
   cursor: pointer;
-  font-size: 13px;
-  flex-shrink: 0;
+  font-size: 15px;
+  font-weight: 600;
   transition: background 0.15s;
+  margin-top: 8px;
 }
 .admin-banner-close:hover { background: rgba(255,255,255,0.3); }
 

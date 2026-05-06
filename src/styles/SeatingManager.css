@@ -79,6 +79,33 @@
   gap: 14px;
 }
 
+/* Collapse header */
+.sm-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #ede6f7;
+}
+
+.sm-section-count {
+  font-size: 13px;
+  color: #6c3fa0;
+  font-weight: 600;
+}
+
+.sm-collapse-btn {
+  background: none;
+  border: 1px solid #c3a8e0;
+  color: #6c3fa0;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.sm-collapse-btn:hover { background: #f3eaff; }
+
 /* Action buttons */
 .sm-actions-row {
   display: flex;

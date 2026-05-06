@@ -93,6 +93,9 @@ export const SeatingManager: React.FC<Props> = ({ weddingId, readOnly = false })
   const [customCategories, setCustomCategories] = useState<string[]>([])
   const [newCatInput, setNewCatInput] = useState('')
 
+  // Collapse guest list
+  const [guestListCollapsed, setGuestListCollapsed] = useState(false)
+
   useEffect(() => { fetchAll() }, [weddingId])
 
   const fetchAll = async () => {
@@ -221,7 +224,10 @@ export const SeatingManager: React.FC<Props> = ({ weddingId, readOnly = false })
     const rows = sorted.map(g => {
       const tbl = g.table_id ? tableMap[g.table_id] : null
       const tableStr = tbl ? `${tbl.table_number}${tbl.table_name ? ` — ${tbl.table_name}` : ''}` : 'לא שובץ'
-      return `<tr><td>${g.full_name}</td><td style="text-align:center">${g.party_size}</td><td>${g.category || ''}</td><td style="text-align:center">${tableStr}</td><td>${g.phone || ''}</td></tr>`
+      const parts = g.full_name.trim().split(' ')
+      const lastName = parts.length > 1 ? parts[parts.length - 1] : ''
+      const firstName = parts.length > 1 ? parts.slice(0, -1).join(' ') : parts[0]
+      return `<tr><td><strong>${lastName}</strong></td><td>${firstName}</td><td style="text-align:center">${g.party_size}</td><td>${g.category || ''}</td><td style="text-align:center">${tableStr}</td><td>${g.phone || ''}</td></tr>`
     }).join('')
     const total = guests.reduce((s, g) => s + g.party_size, 0)
     const html = `<!DOCTYPE html><html dir="rtl"><head><meta charset="utf-8"><title>רשימת מוזמנים</title>
@@ -229,7 +235,7 @@ export const SeatingManager: React.FC<Props> = ({ weddingId, readOnly = false })
     </head><body>
     <h2>רשימת מוזמנים</h2>
     <div class="meta">סה״כ ${guests.length} רשומות · ${total} משתתפים</div>
-    <table><thead><tr><th>שם מלא</th><th>כמות</th><th>קטגוריה</th><th>שולחן</th><th>טלפון</th></tr></thead>
+    <table><thead><tr><th>שם משפחה</th><th>שם פרטי</th><th>כמות</th><th>קטגוריה</th><th>שולחן</th><th>טלפון</th></tr></thead>
     <tbody>${rows}</tbody></table>
     <script>window.onload=()=>window.print()</script></body></html>`
     const w = window.open('', '_blank')
@@ -281,7 +287,13 @@ export const SeatingManager: React.FC<Props> = ({ weddingId, readOnly = false })
       {/* ── GUESTS ── */}
       {activeView === 'guests' && (
         <div className="sm-section">
-          {!readOnly && (
+          <div className="sm-section-header">
+            <span className="sm-section-count">{guests.length} אורחים · {guests.reduce((s,g)=>s+g.party_size,0)} משתתפים</span>
+            <button className="sm-collapse-btn" onClick={() => setGuestListCollapsed(p => !p)}>
+              {guestListCollapsed ? '▼ הרחב רשימה' : '▲ מזער רשימה'}
+            </button>
+          </div>
+          {!guestListCollapsed && !readOnly && (
             <div className="sm-actions-row">
               <button className="sm-btn-primary" onClick={() => { setShowPaste(!showPaste); setShowAddGuest(false) }}>📋 הדבקת רשימה</button>
               <button className="sm-btn-secondary" onClick={() => { setShowAddGuest(!showAddGuest); setShowPaste(false) }}>+ הוסף ידנית</button>
@@ -289,93 +301,97 @@ export const SeatingManager: React.FC<Props> = ({ weddingId, readOnly = false })
             </div>
           )}
 
-          {/* Paste */}
-          {showPaste && !readOnly && (
-            <div className="sm-paste-box">
-              <p className="sm-paste-hint">הדבק מאקסל או גוגל שיטס — כל שורה: <strong>שם, טלפון, כמות</strong> (טלפון וכמות אופציונליים)</p>
-              <textarea className="sm-paste-area" rows={8}
-                placeholder={"ישראל ישראלי\t0501234567\t2\nשרה כהן\t0529876543\nמשה לוי"}
-                value={pasteText} onChange={e => setPasteText(e.target.value)} />
-              <div className="sm-paste-actions">
-                <button className="sm-btn-primary" onClick={handlePaste} disabled={parsing || !pasteText.trim()}>
-                  {parsing ? 'מייבא...' : `ייבא ${parseGuestText(pasteText).length} אורחים`}
-                </button>
-                <button className="sm-btn-ghost" onClick={() => { setShowPaste(false); setPasteText('') }}>ביטול</button>
-              </div>
-            </div>
-          )}
-
-          {/* Add manually */}
-          {showAddGuest && !readOnly && (
-            <div className="sm-add-form">
-              <div className="sm-add-row">
-                <input className="sm-input" placeholder="שם מלא *" value={newGuest.full_name} onChange={e => setNewGuest(p => ({ ...p, full_name: e.target.value }))} />
-                <input className="sm-input" placeholder="טלפון" value={newGuest.phone} onChange={e => setNewGuest(p => ({ ...p, phone: e.target.value }))} />
-                <input className="sm-input sm-input-sm" type="number" min="1" placeholder="כמות" value={newGuest.party_size} onChange={e => setNewGuest(p => ({ ...p, party_size: e.target.value }))} />
-              </div>
-              <select className="sm-select-full" value={newGuest.category} onChange={e => setNewGuest(p => ({ ...p, category: e.target.value }))}>
-                <option value="">— בחר קטגוריה —</option>
-                {allCategories.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
-              <div className="sm-add-actions">
-                <button className="sm-btn-primary" onClick={handleAddGuest} disabled={saving || !newGuest.full_name.trim()}>{saving ? 'שומר...' : 'הוסף'}</button>
-                <button className="sm-btn-ghost" onClick={() => setShowAddGuest(false)}>ביטול</button>
-              </div>
-            </div>
-          )}
-
-          {/* Filters */}
-          <div className="sm-filter-row">
-            <input className="sm-search" placeholder="חיפוש שם או טלפון..." value={search} onChange={e => setSearch(e.target.value)} />
-            <select className="sm-select" value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
-              <option value="all">כל הקטגוריות</option>
-              {allCategories.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
-            <select className="sm-select" value={filterTable} onChange={e => setFilterTable(e.target.value)}>
-              <option value="all">כל השולחנות</option>
-              <option value="unassigned">לא שובצו</option>
-              {tables.map(t => <option key={t.id} value={t.id}>שולחן {t.table_number}{t.table_name ? ` — ${t.table_name}` : ''}</option>)}
-            </select>
-            <select className="sm-select" value={sortBy} onChange={e => setSortBy(e.target.value as 'name' | 'category')}>
-              <option value="name">מיון: שם</option>
-              <option value="category">מיון: קטגוריה</option>
-            </select>
-          </div>
-
-          {/* Add custom category */}
-          {!readOnly && (
-            <div className="sm-custom-cat-row">
-              <input className="sm-input sm-input-cat" placeholder="+ קטגוריה חדשה" value={newCatInput} onChange={e => setNewCatInput(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter' && newCatInput.trim()) { setCustomCategories(p => [...p, newCatInput.trim()]); setNewCatInput('') }}} />
-              {newCatInput.trim() && (
-                <button className="sm-btn-secondary sm-btn-xs" onClick={() => { setCustomCategories(p => [...p, newCatInput.trim()]); setNewCatInput('') }}>הוסף</button>
+          {!guestListCollapsed && (
+            <>
+              {/* Paste */}
+              {showPaste && !readOnly && (
+                <div className="sm-paste-box">
+                  <p className="sm-paste-hint">הדבק מאקסל או גוגל שיטס — כל שורה: <strong>שם, טלפון, כמות</strong> (טלפון וכמות אופציונליים)</p>
+                  <textarea className="sm-paste-area" rows={8}
+                    placeholder={"ישראל ישראלי\t0501234567\t2\nשרה כהן\t0529876543\nמשה לוי"}
+                    value={pasteText} onChange={e => setPasteText(e.target.value)} />
+                  <div className="sm-paste-actions">
+                    <button className="sm-btn-primary" onClick={handlePaste} disabled={parsing || !pasteText.trim()}>
+                      {parsing ? 'מייבא...' : `ייבא ${parseGuestText(pasteText).length} אורחים`}
+                    </button>
+                    <button className="sm-btn-ghost" onClick={() => { setShowPaste(false); setPasteText('') }}>ביטול</button>
+                  </div>
+                </div>
               )}
-            </div>
-          )}
 
-          {/* Guest list — grouped by category if sorted by category */}
-          <div className="sm-guest-list">
-            {filteredGuests.length === 0 && <div className="sm-empty">אין אורחים תואמים</div>}
-            {sortBy === 'category'
-              ? (() => {
-                  const groups = new Map<string, Guest[]>()
-                  filteredGuests.forEach(g => {
-                    const key = g.category || 'ללא קטגוריה'
-                    if (!groups.has(key)) groups.set(key, [])
-                    groups.get(key)!.push(g)
-                  })
-                  return Array.from(groups.entries()).map(([cat, list]) => (
-                    <div key={cat}>
-                      <div className="sm-cat-header">{cat} <span className="sm-cat-count">{list.reduce((s,g)=>s+g.party_size,0)} משתתפים</span></div>
-                      {list.map(g => <GuestRow key={g.id} g={g} tables={tables} guests={guests} readOnly={readOnly} allCategories={allCategories}
-                        onDelete={handleDeleteGuest} onAssign={handleAssignTable} onPartySize={handlePartySizeChange} onCategory={handleCategoryChange} />)}
-                    </div>
-                  ))
-                })()
-              : filteredGuests.map(g => <GuestRow key={g.id} g={g} tables={tables} guests={guests} readOnly={readOnly} allCategories={allCategories}
-                  onDelete={handleDeleteGuest} onAssign={handleAssignTable} onPartySize={handlePartySizeChange} onCategory={handleCategoryChange} />)
-            }
-          </div>
+              {/* Add manually */}
+              {showAddGuest && !readOnly && (
+                <div className="sm-add-form">
+                  <div className="sm-add-row">
+                    <input className="sm-input" placeholder="שם מלא *" value={newGuest.full_name} onChange={e => setNewGuest(p => ({ ...p, full_name: e.target.value }))} />
+                    <input className="sm-input" placeholder="טלפון" value={newGuest.phone} onChange={e => setNewGuest(p => ({ ...p, phone: e.target.value }))} />
+                    <input className="sm-input sm-input-sm" type="number" min="1" placeholder="כמות" value={newGuest.party_size} onChange={e => setNewGuest(p => ({ ...p, party_size: e.target.value }))} />
+                  </div>
+                  <select className="sm-select-full" value={newGuest.category} onChange={e => setNewGuest(p => ({ ...p, category: e.target.value }))}>
+                    <option value="">— בחר קטגוריה —</option>
+                    {allCategories.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                  <div className="sm-add-actions">
+                    <button className="sm-btn-primary" onClick={handleAddGuest} disabled={saving || !newGuest.full_name.trim()}>{saving ? 'שומר...' : 'הוסף'}</button>
+                    <button className="sm-btn-ghost" onClick={() => setShowAddGuest(false)}>ביטול</button>
+                  </div>
+                </div>
+              )}
+
+              {/* Filters */}
+              <div className="sm-filter-row">
+                <input className="sm-search" placeholder="חיפוש שם או טלפון..." value={search} onChange={e => setSearch(e.target.value)} />
+                <select className="sm-select" value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
+                  <option value="all">כל הקטגוריות</option>
+                  {allCategories.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+                <select className="sm-select" value={filterTable} onChange={e => setFilterTable(e.target.value)}>
+                  <option value="all">כל השולחנות</option>
+                  <option value="unassigned">לא שובצו</option>
+                  {tables.map(t => <option key={t.id} value={t.id}>שולחן {t.table_number}{t.table_name ? ` — ${t.table_name}` : ''}</option>)}
+                </select>
+                <select className="sm-select" value={sortBy} onChange={e => setSortBy(e.target.value as 'name' | 'category')}>
+                  <option value="name">מיון: שם</option>
+                  <option value="category">מיון: קטגוריה</option>
+                </select>
+              </div>
+
+              {/* Add custom category */}
+              {!readOnly && (
+                <div className="sm-custom-cat-row">
+                  <input className="sm-input sm-input-cat" placeholder="+ קטגוריה חדשה" value={newCatInput} onChange={e => setNewCatInput(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter' && newCatInput.trim()) { setCustomCategories(p => [...p, newCatInput.trim()]); setNewCatInput('') }}} />
+                  {newCatInput.trim() && (
+                    <button className="sm-btn-secondary sm-btn-xs" onClick={() => { setCustomCategories(p => [...p, newCatInput.trim()]); setNewCatInput('') }}>הוסף</button>
+                  )}
+                </div>
+              )}
+
+              {/* Guest list — grouped by category if sorted by category */}
+              <div className="sm-guest-list">
+                {filteredGuests.length === 0 && <div className="sm-empty">אין אורחים תואמים</div>}
+                {sortBy === 'category'
+                  ? (() => {
+                      const groups = new Map<string, Guest[]>()
+                      filteredGuests.forEach(g => {
+                        const key = g.category || 'ללא קטגוריה'
+                        if (!groups.has(key)) groups.set(key, [])
+                        groups.get(key)!.push(g)
+                      })
+                      return Array.from(groups.entries()).map(([cat, list]) => (
+                        <div key={cat}>
+                          <div className="sm-cat-header">{cat} <span className="sm-cat-count">{list.reduce((s,g)=>s+g.party_size,0)} משתתפים</span></div>
+                          {list.map(g => <GuestRow key={g.id} g={g} tables={tables} guests={guests} readOnly={readOnly} allCategories={allCategories}
+                            onDelete={handleDeleteGuest} onAssign={handleAssignTable} onPartySize={handlePartySizeChange} onCategory={handleCategoryChange} />)}
+                        </div>
+                      ))
+                    })()
+                  : filteredGuests.map(g => <GuestRow key={g.id} g={g} tables={tables} guests={guests} readOnly={readOnly} allCategories={allCategories}
+                      onDelete={handleDeleteGuest} onAssign={handleAssignTable} onPartySize={handlePartySizeChange} onCategory={handleCategoryChange} />)
+                }
+              </div>
+            </>
+          )}
         </div>
       )}
 

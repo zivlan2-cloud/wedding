@@ -175,11 +175,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
   return (
     <div className="admin-layout">
-      {/* ── Slide-down notification banner ── */}
+      {/* ── Full-screen celebration banner ── */}
       {notifications.length > 0 && !bannerDismissed && (
-        <div className="admin-banner">
-          <div className="admin-banner-content">
-            <span className="admin-banner-text">{notifications[bannerIndex]}</span>
+        <div className="admin-banner-overlay" onClick={e => { if (e.target === e.currentTarget) setBannerDismissed(true) }}>
+          <div className="admin-banner-confetti" aria-hidden>
+            {Array.from({ length: 30 }).map((_, i) => (
+              <span key={i} className="admin-confetti-piece" style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 2}s`,
+                animationDuration: `${1.5 + Math.random() * 2}s`,
+                background: ['#f7c59f','#e63946','#6c3fa0','#90be6d','#f8961e','#fff','#ffd700'][i % 7],
+                width: `${8 + Math.random() * 10}px`,
+                height: `${8 + Math.random() * 10}px`,
+                borderRadius: i % 3 === 0 ? '50%' : '2px',
+              }} />
+            ))}
+          </div>
+          <div className="admin-banner-modal">
+            <div className="admin-banner-emoji">🎊</div>
+            <div className="admin-banner-text">{notifications[bannerIndex]}</div>
             {notifications.length > 1 && (
               <div className="admin-banner-nav">
                 <button onClick={() => setBannerIndex(i => (i - 1 + notifications.length) % notifications.length)}>‹</button>
@@ -187,8 +201,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                 <button onClick={() => setBannerIndex(i => (i + 1) % notifications.length)}>›</button>
               </div>
             )}
+            <button className="admin-banner-close" onClick={() => setBannerDismissed(true)}>✕ סגור</button>
           </div>
-          <button className="admin-banner-close" onClick={() => setBannerDismissed(true)}>✕</button>
         </div>
       )}
 

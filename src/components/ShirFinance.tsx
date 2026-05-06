@@ -356,39 +356,6 @@ export const ShirFinance: React.FC<ShirFinanceProps> = ({ couples }) => {
         )}
       </div>
 
-      {/* Manual past weddings */}
-      <div className="sf-section">
-        <h3 className="sf-section-title">חתונות ידניות (לפני האפליקציה)</h3>
-        <button className="sf-add-manual-btn" onClick={() => setShowManualForm(s => !s)}>
-          {showManualForm ? '✕ ביטול' : '+ הוסיפי חתונה'}
-        </button>
-        {showManualForm && (
-          <div className="sf-manual-form">
-            <input className="sf-manual-input" placeholder="שם הזוג *" value={manualForm.name}
-              onChange={e => setManualForm(p => ({ ...p, name: e.target.value }))} />
-            <input className="sf-manual-input" type="number" placeholder="שכ&quot;ט (₪) *" value={manualForm.fee}
-              onChange={e => setManualForm(p => ({ ...p, fee: e.target.value }))} style={{ width: 120 }} />
-            <input className="sf-manual-input" type="number" placeholder="שולם (₪)" value={manualForm.paid}
-              onChange={e => setManualForm(p => ({ ...p, paid: e.target.value }))} style={{ width: 120 }} />
-            <input className="sf-manual-input" type="date" value={manualForm.event_date}
-              onChange={e => setManualForm(p => ({ ...p, event_date: e.target.value }))} />
-            <button className="sf-manual-add-btn" onClick={addManualWedding}>הוסף</button>
-          </div>
-        )}
-        {manualWeddings.length === 0 && !showManualForm && (
-          <p className="sf-empty">לא הוזנו חתונות ידנית עדיין</p>
-        )}
-        {manualWeddings.map(w => (
-          <div key={w.id} className="sf-manual-row">
-            <span className="sf-manual-row-name">{w.name}</span>
-            <span className="sf-manual-row-nums">
-              שכ"ט ₪{w.fee.toLocaleString('he-IL')} &nbsp;|&nbsp; שולם ₪{w.paid.toLocaleString('he-IL')}
-              {w.event_date && ` | ${formatDate(w.event_date)}`}
-            </span>
-            <button className="sf-manual-remove" onClick={() => removeManualWedding(w.id)}>✕</button>
-          </div>
-        ))}
-      </div>
     </div>
   )
 }
