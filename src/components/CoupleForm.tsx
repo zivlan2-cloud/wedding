@@ -4,12 +4,14 @@ import '../styles/CoupleForm.css'
 
 const SLIDES = [
   '/images/1.jpeg',
-  '/images/2.jpeg',
   '/images/3.jpeg',
   '/images/4.jpeg',
   '/images/5.jpeg',
   '/images/6.jpeg',
   '/images/7.jpeg',
+  '/images/A.jpeg',
+  '/images/B.jpeg',
+  '/images/C.jpeg',
 ]
 
 const LANDING_LINK = window.location.origin
@@ -209,11 +211,11 @@ export const CoupleForm: React.FC = () => {
             <p className="cf-welcome-subtitle">מפיקת חתונות</p>
             <div className="cf-divider" />
             <p className="cf-welcome-text">
-              שלום לכם חמודים 👋<br />
-              אני שיר — נשואה לזיו, אמא לנטע וגפן ומפיקה.<br />
-              הפשן שלי זה לייצר מרחבים שמגשימים לאנשים את החלומות שלהם,
-              וחתונה זו הזדמנות מדהימה בדיוק לזה ✨<br /><br />
-              בואו נתחיל להבין מה אתם מחפשים בחתונה שלכם 💫
+              היי, איזה כיף שהגעתם עד לכאן! 👋<br /><br />
+              אני שיר — אמא לנטע וגפן, בת זוג של זיו, ומפיקת חתונות שטח שאוהבת לחלום בגדול אבל להשאיר את הרגליים (וההפקה) על הקרקע. 🌿<br /><br />
+              החודשים הקרובים הולכים להיות רכבת הרים של התרגשות, החלטות, ואולי גם קצת לחץ. אני כאן כדי להיות העוגן שלכם — לעזור לכם להפריד בין העיקר לטפל, לשמור על פרופורציות ועל הכיס, ובעיקר לוודא שתיהנו מהדרך לא פחות מהאירוע עצמו. 💛<br /><br />
+              עבורי, חתונה היא הזדמנות מדהימה ליצור מרחב שמספר את הסיפור שלכם. ✨<br /><br />
+              שנתחיל? 💍
             </p>
             <button className="cf-btn cf-start-btn" onClick={() => setScreen('form')}>
               בואו נתחיל ←

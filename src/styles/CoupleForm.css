@@ -205,7 +205,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
   padding: 64px 56px;
   position: relative;
   z-index: 1;
@@ -291,7 +292,8 @@
   color: var(--text-mid);
   line-height: 1.9;
   margin-bottom: 40px;
-  max-width: 340px;
+  max-width: 380px;
+  text-align: center;
 }
 
 .cf-start-btn {
