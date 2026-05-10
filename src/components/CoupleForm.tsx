@@ -4,14 +4,14 @@ import '../styles/CoupleForm.css'
 
 const SLIDES = [
   '/images/1.jpeg',
+  '/images/6.jpeg',
+  '/images/C.jpeg',
+  '/images/A.jpeg',
+  '/images/5.jpeg',
+  '/images/7.jpeg',
   '/images/3.jpeg',
   '/images/4.jpeg',
-  '/images/5.jpeg',
-  '/images/6.jpeg',
-  '/images/7.jpeg',
-  '/images/A.jpeg',
   '/images/B.jpeg',
-  '/images/C.jpeg',
 ]
 
 const LANDING_LINK = window.location.origin
