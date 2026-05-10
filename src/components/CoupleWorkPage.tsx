@@ -5,9 +5,10 @@ import { Couple, Vendor } from '../types'
 import { VendorWorksheet } from './VendorWorksheet'
 import { CoupleSignature } from './CoupleSignature'
 import { SeatingManager } from './SeatingManager'
+import { CoupleTaskList } from './CoupleTaskList'
 import '../styles/CoupleWorkPage.css'
 
-type CoupleTab = 'vendors' | 'seating' | 'documents'
+type CoupleTab = 'vendors' | 'seating' | 'tasks' | 'documents'
 
 interface DocRecord {
   id: string
@@ -258,6 +259,7 @@ export const CoupleWorkPage: React.FC = () => {
         <div className="cwp-tabs">
           <button className={`cwp-tab-btn ${activeTab === 'vendors' ? 'active' : ''}`} onClick={() => setActiveTab('vendors')}>💼 ספקים</button>
           <button className={`cwp-tab-btn ${activeTab === 'seating' ? 'active' : ''}`} onClick={() => setActiveTab('seating')}>🪑 סידורי הושבה</button>
+          <button className={`cwp-tab-btn ${activeTab === 'tasks' ? 'active' : ''}`} onClick={() => setActiveTab('tasks')}>✅ משימות</button>
           <button className={`cwp-tab-btn ${activeTab === 'documents' ? 'active' : ''}`} onClick={() => setActiveTab('documents')}>📄 חוזים</button>
         </div>
 
@@ -280,6 +282,14 @@ export const CoupleWorkPage: React.FC = () => {
           <div className="cwp-card">
             <h2>סידורי הושבה 🪑</h2>
             <SeatingManager weddingId={couple.id} readOnly={false} />
+          </div>
+        )}
+
+        {/* Tasks tab */}
+        {activeTab === 'tasks' && (
+          <div className="cwp-card">
+            <h2>משימות ✅</h2>
+            <CoupleTaskList weddingId={couple.id} vendors={vendors} />
           </div>
         )}
 
