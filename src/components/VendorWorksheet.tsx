@@ -99,8 +99,13 @@ export const VendorWorksheet: React.FC<VendorWorksheetProps> = ({
   }
 
   const getPayments = (v: Vendor): Payment[] => {
-    try { return (v as any).payments ? JSON.parse((v as any).payments) : [] }
-    catch { return [] }
+    try {
+      const p = (v as any).payments
+      if (!p) return []
+      if (typeof p === 'string') return JSON.parse(p)
+      if (Array.isArray(p)) return p
+      return []
+    } catch { return [] }
   }
 
   const calcPaid = (v: Vendor) => {
