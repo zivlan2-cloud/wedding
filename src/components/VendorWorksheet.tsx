@@ -111,9 +111,15 @@ export const VendorWorksheet: React.FC<VendorWorksheetProps> = ({
   const calcPaid = (v: Vendor) => {
     const pmts = getPayments(v)
     const today = new Date().toISOString().split('T')[0]
-    if (pmts.length > 0) return pmts
-      .filter(p => !p.date || p.date <= today)
-      .reduce((s, p) => s + (parseFloat(p.amount) || 0), 0)
+    const advanceDate = (v as any).advance_date
+    const advanceAmount = parseFloat((v as any).advance_amount) || 0
+    const advancePaid = advanceAmount > 0 && (!advanceDate || advanceDate <= today) ? advanceAmount : 0
+    if (pmts.length > 0) {
+      const paidFromPayments = pmts
+        .filter(p => !p.date || p.date <= today)
+        .reduce((s, p) => s + (parseFloat(p.amount) || 0), 0)
+      return advancePaid + paidFromPayments
+    }
     return v.amount_paid || 0
   }
 

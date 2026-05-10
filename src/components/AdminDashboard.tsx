@@ -128,7 +128,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     'עבר': couples.filter(c => c.status === 'עבר'),
   }
 
-  const totalBudget = couples.filter(c => c.status === 'פעילים').reduce((s, c) => s + (c.budget || 0), 0)
+  const currentYear = new Date().getFullYear()
+  const shirRevenueThisYear = couples
+    .filter(c => c.status === 'פעילים' || c.status === 'עבר')
+    .filter(c => c.event_date && new Date(c.event_date).getFullYear() === currentYear)
+    .reduce((s, c) => s + (c.budget || 0), 0)
 
   const handleSectionSwitch = (section: MainSection) => {
     setMainSection(section)
@@ -254,8 +258,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                 <label>פעילים</label>
               </div>
               <div className="admin-kpi">
-                <span>₪{(totalBudget / 1000).toFixed(0)}k</span>
-                <label>תקציב פעיל</label>
+                <span>₪{(shirRevenueThisYear / 1000).toFixed(0)}k</span>
+                <label>הכנסות {currentYear}</label>
               </div>
             </div>
 
