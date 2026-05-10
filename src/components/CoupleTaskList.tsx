@@ -51,7 +51,12 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
       vendor_id: form.vendor_id || null,
       is_done: false,
     }]).select().single()
-    if (data) setTasks(p => [...p, data])
+    if (data) setTasks(p => [...p, data].sort((a, b) => {
+      if (!a.due_date && !b.due_date) return 0
+      if (!a.due_date) return 1
+      if (!b.due_date) return -1
+      return a.due_date.localeCompare(b.due_date)
+    }))
     setForm({ title: '', due_date: '', priority: 'normal', vendor_id: '' })
     setShowForm(false)
     setSaving(false)
