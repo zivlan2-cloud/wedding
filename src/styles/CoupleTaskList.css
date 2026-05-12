@@ -201,8 +201,17 @@
   flex-shrink: 0;
   padding: 0 2px;
   user-select: none;
+  touch-action: none;
 }
 .ctl-drag-handle:active { cursor: grabbing; }
+
+.ctl-list {
+  touch-action: pan-y;
+}
+
+.ctl-task[draggable="true"] {
+  touch-action: none;
+}
 
 .ctl-task.ctl-drag-over {
   border-color: #6c3fa0;

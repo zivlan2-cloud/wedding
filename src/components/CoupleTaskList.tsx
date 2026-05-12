@@ -35,10 +35,13 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
   const [showForm, setShowForm] = useState(false)
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState({ title: '', due_date: '', priority: 'normal' as Task['priority'], vendor_id: '' })
-
-  // Drag state
-  const dragIdx = useRef<number | null>(null)
   const [dragOver, setDragOver] = useState<number | null>(null)
+
+  // Refs for drag (mouse) and touch
+  const dragIdx = useRef<number | null>(null)
+  const touchDragIdx = useRef<number | null>(null)
+  const touchDragOver = useRef<number | null>(null)
+  const listRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => { fetchTasks() }, [weddingId])
 
@@ -48,7 +51,6 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
       .select('*')
       .eq('wedding_id', weddingId)
       .order('sort_order', { ascending: true })
-    // If all sort_order are 0 (never dragged), fall back to date sort
     const list = data || []
     const allZero = list.every(t => (t.sort_order || 0) === 0)
     setTasks(allZero ? sortByDate(list) : list)
@@ -87,26 +89,55 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
 
   const handleSortByDate = () => setTasks(p => sortByDate(p))
 
-  // Drag handlers — work on full tasks list (not filtered)
-  const handleDragStart = (idx: number) => { dragIdx.current = idx }
-
-  const handleDrop = async (toIdx: number) => {
-    if (dragIdx.current === null || dragIdx.current === toIdx) {
-      dragIdx.current = null
-      setDragOver(null)
-      return
-    }
+  const applyReorder = async (fromIdx: number, toIdx: number) => {
+    if (fromIdx === toIdx) return
     const reordered = [...tasks]
-    const [moved] = reordered.splice(dragIdx.current, 1)
+    const [moved] = reordered.splice(fromIdx, 1)
     reordered.splice(toIdx, 0, moved)
     const withOrder = reordered.map((t, i) => ({ ...t, sort_order: i }))
     setTasks(withOrder)
-    dragIdx.current = null
-    setDragOver(null)
-    // Persist order
     await Promise.all(withOrder.map(t =>
       supabase.from('tasks').update({ sort_order: t.sort_order }).eq('id', t.id)
     ))
+  }
+
+  // ── Mouse drag handlers ──
+  const handleDragStart = (idx: number) => { dragIdx.current = idx }
+
+  const handleDrop = async (toIdx: number) => {
+    if (dragIdx.current === null) return
+    await applyReorder(dragIdx.current, toIdx)
+    dragIdx.current = null
+    setDragOver(null)
+  }
+
+  // ── Touch drag handlers ──
+  const handleTouchStart = (idx: number) => {
+    touchDragIdx.current = idx
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchDragIdx.current === null || !listRef.current) return
+    const touch = e.touches[0]
+    const elements = listRef.current.querySelectorAll('.ctl-task')
+    let overIdx: number | null = null
+    elements.forEach((el, i) => {
+      const rect = el.getBoundingClientRect()
+      if (touch.clientY >= rect.top && touch.clientY <= rect.bottom) overIdx = i
+    })
+    if (overIdx !== null) {
+      touchDragOver.current = overIdx
+      setDragOver(overIdx)
+    }
+  }
+
+  const handleTouchEnd = async () => {
+    if (touchDragIdx.current !== null && touchDragOver.current !== null) {
+      await applyReorder(touchDragIdx.current, touchDragOver.current)
+    }
+    touchDragIdx.current = null
+    touchDragOver.current = null
+    setDragOver(null)
   }
 
   const filtered = filterVendor === 'all'
@@ -141,7 +172,7 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
             ))}
           </select>
           <span className="ctl-count">{filtered.filter(t => !t.is_done).length} פתוחות</span>
-          <button className="ctl-sort-date-btn" onClick={handleSortByDate} title="מיין לפי תאריך">📅 מיין לפי תאריך</button>
+          <button className="ctl-sort-date-btn" onClick={handleSortByDate}>📅 מיין לפי תאריך</button>
         </div>
         <button className="ctl-add-btn" onClick={() => setShowForm(s => !s)}>
           {showForm ? '✕ ביטול' : '+ משימה חדשה'}
@@ -186,7 +217,7 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
         <div className="ctl-empty">אין משימות עדיין — לחצו על "+ משימה חדשה" כדי להתחיל</div>
       )}
 
-      <div className="ctl-list">
+      <div className="ctl-list" ref={listRef}>
         {filtered.map((task, idx) => (
           <div
             key={task.id}
@@ -196,6 +227,9 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
             onDragOver={e => { e.preventDefault(); setDragOver(idx) }}
             onDragLeave={() => setDragOver(null)}
             onDrop={() => handleDrop(idx)}
+            onTouchStart={() => handleTouchStart(idx)}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
             {filterVendor === 'all' && <span className="ctl-drag-handle">⠿</span>}
             <button className="ctl-checkbox" onClick={() => toggleDone(task)}>
