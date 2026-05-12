@@ -193,6 +193,39 @@
 }
 .ctl-delete-btn:hover { color: #e63946; }
 
+/* Drag & drop */
+.ctl-drag-handle {
+  color: #ccc;
+  font-size: 16px;
+  cursor: grab;
+  flex-shrink: 0;
+  padding: 0 2px;
+  user-select: none;
+}
+.ctl-drag-handle:active { cursor: grabbing; }
+
+.ctl-task.ctl-drag-over {
+  border-color: #6c3fa0;
+  background: #f3eaff;
+  transform: scale(1.01);
+}
+
+.ctl-task[draggable="true"] { cursor: default; }
+
+/* Sort by date button */
+.ctl-sort-date-btn {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.ctl-sort-date-btn:hover { border-color: #6c3fa0; color: #6c3fa0; }
+
 @media (max-width: 600px) {
   .ctl-header { flex-direction: column; align-items: flex-start; }
   .ctl-form-row { flex-direction: column; }

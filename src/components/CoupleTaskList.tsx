@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { Vendor } from '../types'
 import '../styles/CoupleTaskList.css'
@@ -10,6 +10,7 @@ interface Task {
   is_done: boolean
   priority: 'low' | 'normal' | 'high'
   vendor_id: string | null
+  sort_order: number
 }
 
 interface Props {
@@ -20,6 +21,13 @@ interface Props {
 const PRIORITY_LABEL: Record<string, string> = { low: 'נמוכה', normal: 'רגילה', high: 'גבוהה' }
 const PRIORITY_COLOR: Record<string, string> = { low: '#90be6d', normal: '#6c63ff', high: '#e63946' }
 
+const sortByDate = (list: Task[]) => [...list].sort((a, b) => {
+  if (!a.due_date && !b.due_date) return 0
+  if (!a.due_date) return 1
+  if (!b.due_date) return -1
+  return a.due_date.localeCompare(b.due_date)
+})
+
 export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
@@ -28,6 +36,10 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState({ title: '', due_date: '', priority: 'normal' as Task['priority'], vendor_id: '' })
 
+  // Drag state
+  const dragIdx = useRef<number | null>(null)
+  const [dragOver, setDragOver] = useState<number | null>(null)
+
   useEffect(() => { fetchTasks() }, [weddingId])
 
   const fetchTasks = async () => {
@@ -35,14 +47,18 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
       .from('tasks')
       .select('*')
       .eq('wedding_id', weddingId)
-      .order('due_date', { ascending: true, nullsFirst: false })
-    setTasks(data || [])
+      .order('sort_order', { ascending: true })
+    // If all sort_order are 0 (never dragged), fall back to date sort
+    const list = data || []
+    const allZero = list.every(t => (t.sort_order || 0) === 0)
+    setTasks(allZero ? sortByDate(list) : list)
     setLoading(false)
   }
 
   const handleAdd = async () => {
     if (!form.title.trim()) return
     setSaving(true)
+    const maxOrder = tasks.length > 0 ? Math.max(...tasks.map(t => t.sort_order || 0)) + 1 : 0
     const { data } = await supabase.from('tasks').insert([{
       wedding_id: weddingId,
       title: form.title.trim(),
@@ -50,13 +66,9 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
       priority: form.priority,
       vendor_id: form.vendor_id || null,
       is_done: false,
+      sort_order: maxOrder,
     }]).select().single()
-    if (data) setTasks(p => [...p, data].sort((a, b) => {
-      if (!a.due_date && !b.due_date) return 0
-      if (!a.due_date) return 1
-      if (!b.due_date) return -1
-      return a.due_date.localeCompare(b.due_date)
-    }))
+    if (data) setTasks(p => [...p, data])
     setForm({ title: '', due_date: '', priority: 'normal', vendor_id: '' })
     setShowForm(false)
     setSaving(false)
@@ -71,6 +83,30 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
   const handleDelete = async (id: string) => {
     setTasks(p => p.filter(t => t.id !== id))
     await supabase.from('tasks').delete().eq('id', id)
+  }
+
+  const handleSortByDate = () => setTasks(p => sortByDate(p))
+
+  // Drag handlers — work on full tasks list (not filtered)
+  const handleDragStart = (idx: number) => { dragIdx.current = idx }
+
+  const handleDrop = async (toIdx: number) => {
+    if (dragIdx.current === null || dragIdx.current === toIdx) {
+      dragIdx.current = null
+      setDragOver(null)
+      return
+    }
+    const reordered = [...tasks]
+    const [moved] = reordered.splice(dragIdx.current, 1)
+    reordered.splice(toIdx, 0, moved)
+    const withOrder = reordered.map((t, i) => ({ ...t, sort_order: i }))
+    setTasks(withOrder)
+    dragIdx.current = null
+    setDragOver(null)
+    // Persist order
+    await Promise.all(withOrder.map(t =>
+      supabase.from('tasks').update({ sort_order: t.sort_order }).eq('id', t.id)
+    ))
   }
 
   const filtered = filterVendor === 'all'
@@ -105,6 +141,7 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
             ))}
           </select>
           <span className="ctl-count">{filtered.filter(t => !t.is_done).length} פתוחות</span>
+          <button className="ctl-sort-date-btn" onClick={handleSortByDate} title="מיין לפי תאריך">📅 מיין לפי תאריך</button>
         </div>
         <button className="ctl-add-btn" onClick={() => setShowForm(s => !s)}>
           {showForm ? '✕ ביטול' : '+ משימה חדשה'}
@@ -150,8 +187,17 @@ export const CoupleTaskList: React.FC<Props> = ({ weddingId, vendors }) => {
       )}
 
       <div className="ctl-list">
-        {filtered.map(task => (
-          <div key={task.id} className={`ctl-task ${task.is_done ? 'ctl-done' : ''}`}>
+        {filtered.map((task, idx) => (
+          <div
+            key={task.id}
+            className={`ctl-task ${task.is_done ? 'ctl-done' : ''} ${dragOver === idx ? 'ctl-drag-over' : ''}`}
+            draggable={filterVendor === 'all'}
+            onDragStart={() => handleDragStart(idx)}
+            onDragOver={e => { e.preventDefault(); setDragOver(idx) }}
+            onDragLeave={() => setDragOver(null)}
+            onDrop={() => handleDrop(idx)}
+          >
+            {filterVendor === 'all' && <span className="ctl-drag-handle">⠿</span>}
             <button className="ctl-checkbox" onClick={() => toggleDone(task)}>
               {task.is_done ? '✓' : ''}
             </button>
