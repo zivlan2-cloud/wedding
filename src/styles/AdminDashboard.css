@@ -360,30 +360,6 @@
   box-shadow: -2px 0 20px rgba(180,150,120,0.08);
 }
 
-/* ── Botanical SVG decorations ── */
-.admin-sidebar::before {
-  content: '';
-  position: absolute;
-  top: 0; right: 0;
-  width: 160px; height: 180px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 180' fill='none'%3E%3C!-- Main branch --%3E%3Cpath d='M140 5 C120 30, 90 50, 60 90 C40 115, 25 140, 10 170' stroke='%23a0855a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C!-- Side branches --%3E%3Cpath d='M115 38 C125 25, 145 20, 155 10' stroke='%23a0855a' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3Cpath d='M95 58 C108 48, 130 44, 145 36' stroke='%23a0855a' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3Cpath d='M75 82 C88 70, 110 68, 128 58' stroke='%23a0855a' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3C!-- Leaves --%3E%3Cellipse cx='152' cy='12' rx='10' ry='5' fill='%23b8c9a0' opacity='0.7' transform='rotate(-40 152 12)'/%3E%3Cellipse cx='132' cy='22' rx='12' ry='5' fill='%23c5d4a8' opacity='0.6' transform='rotate(-55 132 22)'/%3E%3Cellipse cx='148' cy='38' rx='9' ry='4' fill='%23b8c9a0' opacity='0.65' transform='rotate(-30 148 38)'/%3E%3Cellipse cx='130' cy='46' rx='11' ry='5' fill='%23c5d4a8' opacity='0.6' transform='rotate(-45 130 46)'/%3E%3Cellipse cx='125' cy='60' rx='10' ry='4.5' fill='%23b8c9a0' opacity='0.65' transform='rotate(-35 125 60)'/%3E%3Cellipse cx='110' cy='70' rx='12' ry='5' fill='%23c5d4a8' opacity='0.55' transform='rotate(-50 110 70)'/%3E%3C!-- Small flowers --%3E%3Ccircle cx='118' cy='34' r='4' fill='%23e8c4b8' opacity='0.8'/%3E%3Ccircle cx='118' cy='34' r='2' fill='%23d4957a' opacity='0.9'/%3E%3Ccircle cx='95' cy='55' r='3.5' fill='%23e8c4b8' opacity='0.75'/%3E%3Ccircle cx='95' cy='55' r='1.8' fill='%23d4957a' opacity='0.85'/%3E%3Ccircle cx='145' cy='52' r='3' fill='%23f0d4c4' opacity='0.7'/%3E%3Ccircle cx='145' cy='52' r='1.5' fill='%23d4957a' opacity='0.8'/%3E%3C!-- Tiny dots --%3E%3Ccircle cx='155' cy='28' r='1.5' fill='%23c9a07a' opacity='0.5'/%3E%3Ccircle cx='138' cy='15' r='1.2' fill='%23c9a07a' opacity='0.4'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-size: contain;
-  pointer-events: none;
-  opacity: 0.9;
-}
-
-.admin-sidebar::after {
-  content: '';
-  position: absolute;
-  bottom: 0; right: 0;
-  width: 140px; height: 160px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 160' fill='none'%3E%3Cpath d='M130 155 C110 130, 85 105, 60 75 C40 52, 20 28, 8 5' stroke='%23a0855a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M100 130 C115 140, 132 138, 138 145' stroke='%23a0855a' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3Cpath d='M78 108 C95 115, 118 112, 130 118' stroke='%23a0855a' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3Cellipse cx='136' cy='142' rx='9' ry='4' fill='%23b8c9a0' opacity='0.65' transform='rotate(20 136 142)'/%3E%3Cellipse cx='120' cy='132' rx='11' ry='5' fill='%23c5d4a8' opacity='0.6' transform='rotate(30 120 132)'/%3E%3Cellipse cx='128' cy='116' rx='10' ry='4.5' fill='%23b8c9a0' opacity='0.6' transform='rotate(15 128 116)'/%3E%3Cellipse cx='112' cy='108' rx='12' ry='5' fill='%23c5d4a8' opacity='0.55' transform='rotate(25 112 108)'/%3E%3Ccircle cx='105' cy='128' r='4' fill='%23e8c4b8' opacity='0.8'/%3E%3Ccircle cx='105' cy='128' r='2' fill='%23d4957a' opacity='0.9'/%3E%3Ccircle cx='85' cy='108' r='3.5' fill='%23f0d4c4' opacity='0.75'/%3E%3Ccircle cx='85' cy='108' r='1.8' fill='%23d4957a' opacity='0.85'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-size: contain;
-  pointer-events: none;
-  opacity: 0.85;
-}
 
 .admin-brand {
   display: flex;
