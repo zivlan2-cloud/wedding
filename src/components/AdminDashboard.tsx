@@ -259,7 +259,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               </div>
               <div className="admin-kpi">
                 <span>₪{(shirRevenueThisYear / 1000).toFixed(0)}k</span>
-                <label>הכנסות {currentYear}</label>
+                <label>הכנסות צפויות {currentYear}</label>
               </div>
             </div>
 

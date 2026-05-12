@@ -9,21 +9,23 @@
 .admin-add-couple-btn {
   width: 100%;
   padding: 10px;
-  background: rgba(108, 99, 255, 0.15);
-  border: 1.5px dashed rgba(108, 99, 255, 0.5);
+  background: rgba(180,140,100,0.1);
+  border: 1.5px dashed rgba(160,120,80,0.4);
   border-radius: 12px;
-  color: rgba(200, 195, 255, 0.9);
+  color: #7d5c3c;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s;
   margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
 }
 .admin-add-couple-btn:hover {
-  background: rgba(108, 99, 255, 0.28);
-  border-color: rgba(108, 99, 255, 0.8);
-  color: white;
+  background: rgba(180,140,100,0.2);
+  border-color: rgba(160,120,80,0.7);
+  color: #4a3728;
 }
 
 /* ── Add couple modal ── */
@@ -344,16 +346,43 @@
 
 .admin-sidebar {
   width: 280px;
-  background: rgba(20, 20, 40, 0.92);
-  backdrop-filter: blur(8px);
-  color: white;
+  background: #faf6f0;
+  color: #4a3728;
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
   padding: 24px 16px;
   overflow-y: auto;
+  overflow-x: hidden;
   flex-shrink: 0;
+  border-left: 1px solid #e8ddd0;
+  box-shadow: -2px 0 20px rgba(180,150,120,0.08);
+}
+
+/* ── Botanical SVG decorations ── */
+.admin-sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 160px; height: 180px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 180' fill='none'%3E%3C!-- Main branch --%3E%3Cpath d='M140 5 C120 30, 90 50, 60 90 C40 115, 25 140, 10 170' stroke='%23a0855a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C!-- Side branches --%3E%3Cpath d='M115 38 C125 25, 145 20, 155 10' stroke='%23a0855a' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3Cpath d='M95 58 C108 48, 130 44, 145 36' stroke='%23a0855a' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3Cpath d='M75 82 C88 70, 110 68, 128 58' stroke='%23a0855a' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3C!-- Leaves --%3E%3Cellipse cx='152' cy='12' rx='10' ry='5' fill='%23b8c9a0' opacity='0.7' transform='rotate(-40 152 12)'/%3E%3Cellipse cx='132' cy='22' rx='12' ry='5' fill='%23c5d4a8' opacity='0.6' transform='rotate(-55 132 22)'/%3E%3Cellipse cx='148' cy='38' rx='9' ry='4' fill='%23b8c9a0' opacity='0.65' transform='rotate(-30 148 38)'/%3E%3Cellipse cx='130' cy='46' rx='11' ry='5' fill='%23c5d4a8' opacity='0.6' transform='rotate(-45 130 46)'/%3E%3Cellipse cx='125' cy='60' rx='10' ry='4.5' fill='%23b8c9a0' opacity='0.65' transform='rotate(-35 125 60)'/%3E%3Cellipse cx='110' cy='70' rx='12' ry='5' fill='%23c5d4a8' opacity='0.55' transform='rotate(-50 110 70)'/%3E%3C!-- Small flowers --%3E%3Ccircle cx='118' cy='34' r='4' fill='%23e8c4b8' opacity='0.8'/%3E%3Ccircle cx='118' cy='34' r='2' fill='%23d4957a' opacity='0.9'/%3E%3Ccircle cx='95' cy='55' r='3.5' fill='%23e8c4b8' opacity='0.75'/%3E%3Ccircle cx='95' cy='55' r='1.8' fill='%23d4957a' opacity='0.85'/%3E%3Ccircle cx='145' cy='52' r='3' fill='%23f0d4c4' opacity='0.7'/%3E%3Ccircle cx='145' cy='52' r='1.5' fill='%23d4957a' opacity='0.8'/%3E%3C!-- Tiny dots --%3E%3Ccircle cx='155' cy='28' r='1.5' fill='%23c9a07a' opacity='0.5'/%3E%3Ccircle cx='138' cy='15' r='1.2' fill='%23c9a07a' opacity='0.4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.admin-sidebar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 140px; height: 160px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 160' fill='none'%3E%3Cpath d='M130 155 C110 130, 85 105, 60 75 C40 52, 20 28, 8 5' stroke='%23a0855a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M100 130 C115 140, 132 138, 138 145' stroke='%23a0855a' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3Cpath d='M78 108 C95 115, 118 112, 130 118' stroke='%23a0855a' stroke-width='1' fill='none' stroke-linecap='round'/%3E%3Cellipse cx='136' cy='142' rx='9' ry='4' fill='%23b8c9a0' opacity='0.65' transform='rotate(20 136 142)'/%3E%3Cellipse cx='120' cy='132' rx='11' ry='5' fill='%23c5d4a8' opacity='0.6' transform='rotate(30 120 132)'/%3E%3Cellipse cx='128' cy='116' rx='10' ry='4.5' fill='%23b8c9a0' opacity='0.6' transform='rotate(15 128 116)'/%3E%3Cellipse cx='112' cy='108' rx='12' ry='5' fill='%23c5d4a8' opacity='0.55' transform='rotate(25 112 108)'/%3E%3Ccircle cx='105' cy='128' r='4' fill='%23e8c4b8' opacity='0.8'/%3E%3Ccircle cx='105' cy='128' r='2' fill='%23d4957a' opacity='0.9'/%3E%3Ccircle cx='85' cy='108' r='3.5' fill='%23f0d4c4' opacity='0.75'/%3E%3Ccircle cx='85' cy='108' r='1.8' fill='%23d4957a' opacity='0.85'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  pointer-events: none;
+  opacity: 0.85;
 }
 
 .admin-brand {
@@ -362,26 +391,31 @@
   justify-content: center;
   margin-bottom: 24px;
   padding: 8px;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-brand-text {
-  font-size: 16px;
-  font-weight: 700;
-  color: rgba(232, 201, 176, 0.9);
+  font-size: 20px;
+  font-weight: 400;
+  color: #7d5c3c;
   font-family: 'Georgia', serif;
   font-style: italic;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 .admin-kpis {
   display: flex;
   gap: 8px;
   margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-kpi {
   flex: 1;
-  background: rgba(255,255,255,0.08);
+  background: rgba(180,140,100,0.1);
+  border: 1px solid rgba(180,140,100,0.2);
   border-radius: 10px;
   padding: 10px 8px;
   text-align: center;
@@ -389,14 +423,14 @@
 
 .admin-kpi span {
   display: block;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
-  color: #fff;
+  color: #5a3e28;
 }
 
 .admin-kpi label {
   font-size: 10px;
-  color: rgba(255,255,255,0.5);
+  color: #a08060;
   margin-top: 2px;
 }
 
@@ -405,6 +439,8 @@
   flex-direction: column;
   gap: 6px;
   margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-tab {
@@ -413,9 +449,9 @@
   gap: 8px;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 2px solid transparent;
-  background: rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.6);
+  border: 1.5px solid transparent;
+  background: rgba(180,140,100,0.07);
+  color: #7d5c3c;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -425,12 +461,13 @@
 }
 
 .admin-tab:hover {
-  background: rgba(255,255,255,0.1);
-  color: white;
+  background: rgba(180,140,100,0.15);
+  color: #5a3e28;
 }
 
 .admin-tab.active {
-  background: rgba(255,255,255,0.1);
+  background: rgba(180,140,100,0.18);
+  border-color: rgba(160,120,80,0.4);
 }
 
 .tab-dot {
@@ -442,10 +479,11 @@
 
 .tab-count {
   margin-right: auto;
-  background: rgba(255,255,255,0.15);
+  background: rgba(160,120,80,0.15);
   border-radius: 20px;
   padding: 1px 8px;
   font-size: 12px;
+  color: #7d5c3c;
 }
 
 .admin-couples-list {
@@ -454,64 +492,71 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-search {
   width: 100%;
   padding: 9px 12px;
   border-radius: 10px;
-  border: 1.5px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.07);
-  color: white;
+  border: 1.5px solid rgba(180,140,100,0.25);
+  background: rgba(255,255,255,0.6);
+  color: #4a3728;
   font-size: 13px;
   font-family: inherit;
   outline: none;
   margin-bottom: 10px;
   transition: border-color 0.15s;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
-.admin-search::placeholder { color: rgba(255,255,255,0.35); }
-.admin-search:focus { border-color: rgba(201,160,122,0.6); }
+.admin-search::placeholder { color: #b0907a; }
+.admin-search:focus { border-color: rgba(160,120,80,0.5); }
 
 .admin-couple-item {
   padding: 12px 14px;
   border-radius: 10px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(180,140,100,0.15);
   cursor: pointer;
   transition: background 0.15s;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-couple-item:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.8);
 }
 
 .admin-couple-item.active {
-  background: rgba(108,99,255,0.3);
-  border: 1px solid rgba(108,99,255,0.5);
+  background: rgba(201,160,122,0.25);
+  border: 1px solid rgba(160,120,80,0.4);
 }
 
 .admin-couple-item strong {
   font-size: 14px;
-  color: white;
+  color: #4a3728;
 }
 
 .admin-couple-item span {
   font-size: 12px;
-  color: rgba(255,255,255,0.5);
+  color: #a08060;
 }
 
 .admin-empty {
   text-align: center;
-  color: rgba(255,255,255,0.3);
+  color: #b0907a;
   font-size: 13px;
   padding: 24px;
 }
 
 .admin-loading {
-  color: rgba(255,255,255,0.4);
+  color: #b0907a;
   text-align: center;
   padding: 16px;
 }
@@ -519,19 +564,21 @@
 .admin-logout {
   margin-top: 16px;
   padding: 10px;
-  background: rgba(255,255,255,0.07);
-  border: none;
+  background: rgba(180,140,100,0.1);
+  border: 1px solid rgba(180,140,100,0.2);
   border-radius: 10px;
-  color: rgba(255,255,255,0.5);
+  color: #a08060;
   font-size: 13px;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.15s;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-logout:hover {
-  background: rgba(255,255,255,0.12);
-  color: white;
+  background: rgba(180,140,100,0.2);
+  color: #5a3e28;
 }
 
 .admin-main {
@@ -565,33 +612,35 @@
   gap: 10px;
   padding: 11px 14px;
   border-radius: 11px;
-  border: 2px solid transparent;
-  background: rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.6);
+  border: 1.5px solid transparent;
+  background: rgba(180,140,100,0.07);
+  color: #7d5c3c;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.15s;
   text-align: right;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-section-btn:hover {
-  background: rgba(255,255,255,0.1);
-  color: white;
+  background: rgba(180,140,100,0.15);
+  color: #4a3728;
 }
 
 .admin-section-btn.active {
-  background: rgba(255,255,255,0.12);
-  color: white;
-  border-color: rgba(255,255,255,0.2);
+  background: rgba(180,140,100,0.18);
+  color: #4a3728;
+  border-color: rgba(160,120,80,0.35);
 }
 
 /* Management section button gets champagne accent when active */
 .admin-section-btn-management.active {
-  border-color: rgba(201,160,122,0.6);
-  color: #e8c9a0;
-  background: rgba(201,160,122,0.12);
+  border-color: rgba(160,120,80,0.5);
+  color: #5a3e28;
+  background: rgba(201,160,122,0.18);
 }
 
 /* ---- Management sub-tabs in sidebar ---- */
@@ -609,26 +658,28 @@
   gap: 10px;
   padding: 11px 14px;
   border-radius: 11px;
-  border: 2px solid transparent;
-  background: rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.55);
+  border: 1.5px solid transparent;
+  background: rgba(180,140,100,0.07);
+  color: #7d5c3c;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.15s;
   text-align: right;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-mgmt-tab:hover {
-  background: rgba(255,255,255,0.1);
-  color: white;
+  background: rgba(180,140,100,0.15);
+  color: #4a3728;
 }
 
 .admin-mgmt-tab.active {
-  background: rgba(201,160,122,0.18);
-  border-color: rgba(201,160,122,0.55);
-  color: #e8c9a0;
+  background: rgba(201,160,122,0.2);
+  border-color: rgba(160,120,80,0.45);
+  color: #5a3e28;
 }
 
 /* ---- Management view wrapper ---- */
